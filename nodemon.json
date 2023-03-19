@@ -1,0 +1,11 @@
+{
+	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/nodemon.json",
+	"verbose": true,
+	"ignore": ["*.test.js", "**/fixtures/**"],
+	"execMap": {
+		"ts": "ts-node"
+	},
+	"env": {
+		"MODE": "development"
+	}
+}
