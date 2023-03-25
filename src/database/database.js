@@ -15,15 +15,12 @@ db.run('CREATE TABLE IF NOT EXISTS Subject (' +
             'name varchar(255));');
 db.run('CREATE TABLE IF NOT EXISTS Entry (' +
             'entryID INTEGER PRIMARY KEY AUTOINCREMENT,' +
+            'subjectID INTEGER NOT NULL,' +
             'title varchar(255),' +
             'date DATE,' +
-            'content varchar(255));');
-db.run('CREATE TABLE IF NOT EXISTS SubjectEntry (' +
-            'subjectID int NOT NULL, entryID int NOT NULL,' +
-            'PRIMARY KEY(subjectID, entryID),' +
-            'FOREIGN KEY(subjectID) REFERENCES Subject(subjectID),' +
-            'FOREIGN KEY(entryID) REFERENCES Entry(entryID));');
-            
+            'content varchar(255),' +
+            'FOREIGN KEY(subjectID) REFERENCES Subject(subjectID));');
+
 // query data to check the tables
 db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, tables) {
     if (err) {
