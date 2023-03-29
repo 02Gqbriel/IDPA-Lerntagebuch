@@ -1,8 +1,9 @@
 import express from 'express';
-import { router } from './controllers/router';
+import { router } from './controllers/api';
 import { join } from 'path';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 
 const PORT = process.env.PORT ?? 3000;
 const PUBLIC_FOLDER =
@@ -21,6 +22,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression());
 
 app.use('/api', router);
 
