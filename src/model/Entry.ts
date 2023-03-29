@@ -1,13 +1,18 @@
-class Entry {
+import {Subject} from "./Subject";
+
+export class Entry {
     private entryID: number;
     private title: string;
     private date!: Date;
     private content: string;
+    private subject: Subject;    
   
-    constructor(userID: number, username: string, password: string) {
-      this.entryID = userID;
-      this.title = username;
-      this.content = password;
+    constructor(entryID: number, title: string, date: Date, content: string, subject: Subject) {
+      this.entryID = entryID;
+      this.title = title;
+      this.date = date;
+      this.content = content;
+      this.subject = subject;
     }
     
     public get getEntryID(): number {
@@ -36,6 +41,13 @@ class Entry {
     }
     public set setContent(content: string) {
         this.content = content;
+    }
+
+    public get getSubject(): Subject {
+        return this.subject;
+    }
+    public set setSubject(value: Subject) {
+        this.subject = value;
     }
   }
   

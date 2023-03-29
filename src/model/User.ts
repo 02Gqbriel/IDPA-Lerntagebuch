@@ -1,28 +1,32 @@
-class User {
-    private userID: number;
-    private user: string;
+import {getIdByNamePwd} from "./userDao";
+
+export class User {
+    //private userID: number; // wieso? is doch auto increment...
+    private username: string;
     private password: string;
+    // nicht löschen mit auto_increment, sondern sql delete flag setzen und 
+    // bei anzeige fragen, ob delete flag gesetzt wurde 
   
-    constructor(userID: number, username: string, password: string) {
-      this.userID = userID;
-      this.user = username;
+    constructor(username: string, password: string) {
+      this.username = username;
       this.password = password;
     }
   
-    get getUserID(): number {
-      return this.userID;
-    }
-  
-    set setUserID(userID: number) {
-      this.userID = userID;
+    getUserID(username: string, password: string): number {
+      var userID = 0;
+      const result = getIdByNamePwd(username, password);
+      result.then((value) => {
+        userID = value;
+      });
+      return userID;
     }
   
     get getUsername(): string {
-      return this.user;
+      return this.username;
     }
   
     set setUsername(username: string) {
-      this.user = username;
+      this.username = username;
     }
   
     get getPassword(): string {
