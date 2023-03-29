@@ -1,6 +1,8 @@
 import express from 'express';
 import { router } from './controllers/router';
 import { join } from 'path';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
 
 const PORT = process.env.PORT ?? 3000;
 const PUBLIC_FOLDER =
@@ -8,9 +10,21 @@ const PUBLIC_FOLDER =
 		? join(process.cwd(), 'dist', 'public')
 		: join(process.cwd(), 'src', 'views');
 
+const TINYMCE =
+	process.env.MODE === 'production'
+		? join(PUBLIC_FOLDER, 'tinymce')
+		: join(process.cwd(), 'node_modules', 'tinymce');
+
 const app = express();
 
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 app.use('/api', router);
+
+app.use('/tinymce', express.static(TINYMCE));
 
 app.use(express.static(PUBLIC_FOLDER));
 
