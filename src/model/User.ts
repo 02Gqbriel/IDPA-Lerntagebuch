@@ -1,4 +1,4 @@
-import {getIdByNamePwd} from "./userdb";
+import {getIdByNamePwd} from "./userDao";
 
 export class User {
     //private userID: number; // wieso? is doch auto increment...
