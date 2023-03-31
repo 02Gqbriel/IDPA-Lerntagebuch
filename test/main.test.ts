@@ -1,6 +1,5 @@
 import { spec } from 'pactum';
 import { server } from '../src/main';
-import request from 'supertest';
 
 const PORT = process.env.PORT ?? 3000;
 
