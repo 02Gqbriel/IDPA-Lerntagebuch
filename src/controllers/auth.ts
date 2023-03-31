@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { comparePasswords, hashPassword } from '../util/hash';
-import { createToken } from '../util/jwt';
+import { createToken, verifyToken } from '../util/jwt';
 
 export const router = Router();
 const upload = multer();
@@ -28,7 +28,9 @@ router.post('/login', upload.none(), async (req, res) => {
 		return res.status(400).send("Password doesn't match username");
 	}
 
-	res.send('ok');
+	const token = createToken(username);
+
+	res.json(token);
 });
 
 router.post('/register', upload.none(), async (req, res) => {
@@ -46,9 +48,17 @@ router.post('/register', upload.none(), async (req, res) => {
 		return res.status(404).send('Username is already taken');
 	}
 
-	const token = createToken(username);
-
 	users[username] = { passwordHash: hashPassword(password), role };
 
-	res.send(token);
+	res.send('ok');
+});
+
+router.get('/refresh', verifyToken, async (req, res) => {
+	const token = req.headers['authorization'];
+
+	if (token === undefined) {
+		return res.status(401).send('No token found');
+	}
+
+	res.send('ok');
 });

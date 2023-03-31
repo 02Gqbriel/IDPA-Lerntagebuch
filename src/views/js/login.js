@@ -17,6 +17,11 @@ document.getElementById('form').onsubmit = async ev => {
 	});
 
 	if (res.ok) {
+		const { token, expires } = await res.json();
+
+		sessionStorage.setItem('token', token);
+		sessionStorage.setItem('expires', expires);
+
 		return window.location.replace('/index.html');
 	}
 

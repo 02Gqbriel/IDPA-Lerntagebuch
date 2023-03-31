@@ -19,8 +19,6 @@ document.getElementById('form').onsubmit = async ev => {
 	});
 
 	if (res.ok) {
-		const { token, expires } = await res.json();
-
 		return window.location.replace('/login.html');
 	}
 
