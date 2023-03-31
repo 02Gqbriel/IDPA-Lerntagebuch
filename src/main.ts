@@ -5,6 +5,9 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const PORT = process.env.PORT ?? 3000;
 const PUBLIC_FOLDER =
 	process.env.MODE === 'production'
