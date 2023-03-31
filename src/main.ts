@@ -34,6 +34,6 @@ app.get('*', (req, res) => {
 	res.status(404).sendFile(join(PUBLIC_FOLDER, '404.html'));
 });
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
 	console.log('> Server running on http://127.0.0.1:3000/');
 });
