@@ -8,7 +8,7 @@
 		"dev": "nodemon ./src/main.ts",
 		"build": "node esbuild.mjs",
 		"start": "cross-env MODE=production node dist/index.js",
-		"test": "cross-env SALT=test mocha -reporter html -r ts-node/register test/**/*"
+		"test": "cross-env SALT=test mocha -r ts-node/register test/**/*"
 	},
 	"repository": {
 		"type": "git",
