@@ -4,15 +4,10 @@ import { User } from "./User";
 
 const db = new sqlite3.Database('../database/database.learndiary');
 
-/* interface User {
-  id: number;
-  username: string;
-  password: string;
-} */
 
 export function insertUser(user: User): Promise<String> {
   const insert = 'INSERT INTO User (username, password) VALUES (?,?)';
-  const { getUsername, getPassword } = user;
+  //const { getUsername, getPassword } = user;
   return new Promise((resolve, reject) => {
     db.run(insert, [user.getUsername, user.getPassword], (err: { message: any; }) => {
       if (err) {
@@ -26,7 +21,7 @@ export function insertUser(user: User): Promise<String> {
 
 export function updateUser(user: User): Promise<void> {
   const update = 'UPDATE User SET username=?, password=? WHERE id=?';
-  const { getUserID, getUsername, getPassword } = user;
+  //const { getUserID, getUsername, getPassword } = user;
   return new Promise((resolve, reject) => {
     db.run(update, [user.getUsername, user.getPassword, user.getUserID], (err: { message: any; }) => {
       if (err) {
