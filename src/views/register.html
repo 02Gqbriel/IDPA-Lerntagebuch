@@ -35,27 +35,6 @@
 			<button id="submit" type="submit">submit</button>
 		</form>
 
-		<script>
-			document.getElementById('form').onsubmit = async ev => {
-				ev.preventDefault();
-
-				const username = document.getElementById('username').value;
-				const password = document.getElementById('password').value;
-
-				const formData = new FormData();
-
-				formData.append('username', username);
-				formData.append('password', password);
-
-				const res = await fetch('/api/register', {
-					method: 'post',
-					body: formData,
-				});
-
-				if (res.ok) {
-					window.location.replace('/login.html');
-				}
-			};
-		</script>
+		<script src="/js/register.js"></script>
 	</body>
 </html>

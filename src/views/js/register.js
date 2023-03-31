@@ -3,6 +3,7 @@ document.getElementById('form').onsubmit = async ev => {
 
 	const username = document.getElementById('username').value;
 	const password = document.getElementById('password').value;
+	const role = document.getElementById('role').value;
 
 	const url = ev.target.action;
 
@@ -10,6 +11,7 @@ document.getElementById('form').onsubmit = async ev => {
 
 	formData.append('username', username);
 	formData.append('password', password);
+	formData.append('role', role);
 
 	const res = await fetch(url, {
 		method: 'post',
@@ -17,6 +19,8 @@ document.getElementById('form').onsubmit = async ev => {
 	});
 
 	if (res.ok) {
+		const { token, expires } = await res.json();
+
 		return window.location.replace('/login.html');
 	}
 

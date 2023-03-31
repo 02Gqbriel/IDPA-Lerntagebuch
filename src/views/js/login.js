@@ -17,7 +17,7 @@ document.getElementById('form').onsubmit = async ev => {
 	});
 
 	if (res.ok) {
-		return window.location.replace('/login.html');
+		return window.location.replace('/index.html');
 	}
 
 	ev.target.reset();
