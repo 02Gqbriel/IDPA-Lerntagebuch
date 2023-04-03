@@ -23,8 +23,12 @@ form > fieldset > input,
 select {
 	padding: 5px;
 	border: 1px solid black;
-	border-radius: 3px;
+	border-radius: 5px;
 	margin-bottom: 10px;
+}
+
+option:hover {
+	background-color: #171717;
 }
 
 #submit {
