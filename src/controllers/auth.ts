@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { comparePasswords, hashPassword } from '../util/hash';
-import { createToken, verifyToken } from '../util/jwt';
+import { createToken, reverseToken, verifyToken } from '../util/jwt';
 
 export const router = Router();
 const upload = multer();
@@ -54,11 +54,17 @@ router.post('/register', upload.none(), async (req, res) => {
 });
 
 router.get('/refresh', verifyToken, async (req, res) => {
-	const token = req.headers['authorization'];
+	const token = req.headers['authorization'] as string;
 
-	if (token === undefined) {
-		return res.status(401).send('No token found');
+	const username = reverseToken(token);
+
+	if (username === null) {
+		return res.status(400).send('something went wrong');
 	}
 
+	res.json(createToken(username));
+});
+
+router.get('/verify', verifyToken, async (req, res) => {
 	res.send('ok');
 });

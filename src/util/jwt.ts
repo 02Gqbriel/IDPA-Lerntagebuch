@@ -24,6 +24,28 @@ export function createToken(username: string) {
 	};
 }
 
+export function reverseToken(token: string) {
+	if (secret === undefined) {
+		throw new Error(
+			'TOKEN_SECRET wurde nicht in den Umgebungvariabeln gefunden!'
+		);
+	}
+
+	try {
+		const { exp, data, iat } = jwt.verify(token, secret) as {
+			exp: number;
+			data: string;
+			iat: number;
+		};
+
+		return data;
+	} catch (error) {
+		console.error(error);
+
+		return null;
+	}
+}
+
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
 	if (secret === undefined) {
 		throw new Error(
