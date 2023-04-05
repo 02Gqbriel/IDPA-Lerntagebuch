@@ -2,15 +2,40 @@
 const sqlite3 = require('sqlite3').verbose();
 import { User } from "./User";
 
-const db = new sqlite3.Database('../database/database.learndiary');
+const path = require('path');
+const dbPath = path.join(__dirname, '..', 'database', 'learndiary.db');
+const db = new sqlite3.Database(dbPath);
 
 
-export function insertUser(user: User): Promise<String> {
+export function insertUser(user: User): Promise<any> {
   const insert = 'INSERT INTO User (username, password) VALUES (?,?)';
-  //const { getUsername, getPassword } = user;
+  const selectQuery = 'SELECT last_insert_rowid() as id';
+
   return new Promise((resolve, reject) => {
-    db.run(insert, [user.getUsername, user.getPassword], (err: { message: any; }) => {
+    db.run(insert, [user.getUsername(), user.getPassword()], (err: { message: any; }) => {
       if (err) {
+        reject(err.message);
+      } else {
+        db.get(selectQuery, [], function (err: any, row: any) {
+          if (err) {
+            reject(err.message);
+          } else { 
+            user.setUserID(row.id);
+            resolve(row.id);
+          }
+        });
+      }
+    });
+  });
+}
+
+export function updateUser(userID: number, username: string, password: string): Promise<String> {
+  const update = 'UPDATE User SET username=?, password=? WHERE userID=?';
+  
+  return new Promise((resolve, reject) => {
+    db.run(update, [username, password, userID], (err: { message: any; }) => {
+      if (err) {
+        console.error(`Error updating user: ${err.message}`);
         reject(err.message);
       } else {
         resolve('worked');
@@ -19,29 +44,15 @@ export function insertUser(user: User): Promise<String> {
   });
 }
 
-export function updateUser(user: User): Promise<void> {
-  const update = 'UPDATE User SET username=?, password=? WHERE id=?';
-  //const { getUserID, getUsername, getPassword } = user;
-  return new Promise((resolve, reject) => {
-    db.run(update, [user.getUsername, user.getPassword, user.getUserID], (err: { message: any; }) => {
-      if (err) {
-        reject(err.message);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
+export function selectEntity(userID: number | undefined): Promise<any> {
+  const selectById = 'SELECT * FROM User WHERE userID=?';
 
-// not this... delete flag!
-export function deleteUser(id: number): Promise<void> {
-  const deleteQuery = 'DELETE FROM User WHERE id=?';
   return new Promise((resolve, reject) => {
-    db.run(deleteQuery, id, (err: { message: any; }) => {
+    db.get(selectById, [userID], (err: { message: any; }, row: any) => {
       if (err) {
         reject(err.message);
       } else {
-        resolve();
+        resolve(row);
       }
     });
   });
@@ -49,6 +60,7 @@ export function deleteUser(id: number): Promise<void> {
 
 export function selectAll(): Promise<User[]> {
   const selectAll = 'SELECT * FROM User';
+
   return new Promise<User[]>((resolve, reject) => {
     db.all(selectAll, [], (err: { message: any; }, rows: User[]) => {
       if (err) {
@@ -60,28 +72,16 @@ export function selectAll(): Promise<User[]> {
   });
 }
 
-export function selectEntity(username: string, password: string): Promise<User> {
-  const selectById = 'SELECT * FROM User WHERE username=? AND password=?';
+export function deleteUser(id: number): Promise<any> {
+  const deleteQuery = 'DELETE FROM User WHERE userID=?';
   return new Promise((resolve, reject) => {
-    db.get(selectById, [username, password], (err: { message: any; }, row: User) => {
+    db.run(deleteQuery, id, (err: { message: any; }) => {
       if (err) {
         reject(err.message);
       } else {
-        resolve(row);
+        resolve('worked');
       }
     });
   });
 }
 
-export function getIdByNamePwd(username: string, password: string): Promise<number> {
-  const selectById = 'SELECT userID FROM User WHERE username=? AND password=?';
-  return new Promise((resolve, reject) => {
-    db.get(selectById, [username, password], (err: { message: any; }, row: number) => {
-      if (err) {
-        reject(err.message);
-      } else {
-        resolve(row);
-      }
-    });
-  });
-}
