@@ -3,7 +3,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // open the database (or create database in current dir)
-const db = new sqlite3.Database('./database.learndiary');
+const db = new sqlite3.Database('./learndiary.db');
 
 // create tables
 db.run('CREATE TABLE IF NOT EXISTS User (' +

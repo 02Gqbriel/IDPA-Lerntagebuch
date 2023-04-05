@@ -1,18 +1,18 @@
 //import sqlite3 from 'sqlite3';
 const sqlite3 = require('sqlite3').verbose();
-import { User } from "./User";
+import { Entry } from "./Entry";
 
 const path = require('path');
 const dbPath = path.join(__dirname, '..', 'database', 'learndiary.db');
 const db = new sqlite3.Database(dbPath);
 
 
-export function insertUser(user: User): Promise<any> {
-  const insert = 'INSERT INTO User (username, password) VALUES (?,?)';
+export function insertEntry(entry: Entry): Promise<any> {
+  const insert = 'INSERT INTO Entry (subjectID, title, date, content) VALUES (?,?,?,?)';
   const selectQuery = 'SELECT last_insert_rowid() as id';
 
   return new Promise((resolve, reject) => {
-    db.run(insert, [user.getUsername(), user.getPassword()], (err: { message: any; }) => {
+    db.run(insert, [entry.getSubject().getSubjectID(), entry.getTitle(), entry.getDate(), entry.getContent()], (err: { message: any; }) => {
       if (err) {
         reject(err.message);
       } else {
@@ -20,7 +20,7 @@ export function insertUser(user: User): Promise<any> {
           if (err) {
             reject(err.message);
           } else { 
-            user.setUserID(row.id);
+            entry.setEntryID(row.id);
             resolve(row.id);
           }
         });
@@ -29,11 +29,11 @@ export function insertUser(user: User): Promise<any> {
   });
 }
 
-export function updateUser(userID: number, username: string, password: string): Promise<String> {
-  const update = 'UPDATE User SET username=?, password=? WHERE userID=?';
+export function updateEntry(entryID: number, subjectID: number, title: string, date: Date, content: string): Promise<String> {
+  const update = 'UPDATE Entry SET subjectID=?, title=?, date=?, content=? WHERE entryID=?';
   
   return new Promise((resolve, reject) => {
-    db.run(update, [username, password, userID], (err: { message: any; }) => {
+    db.run(update, [subjectID, title, date, content, entryID], (err: { message: any; }) => {
       if (err) {
         console.error(`Error updating user: ${err.message}`);
         reject(err.message);
@@ -44,11 +44,11 @@ export function updateUser(userID: number, username: string, password: string): 
   });
 }
 
-export function selectEntity(userID: number | undefined): Promise<any> {
-  const selectById = 'SELECT * FROM User WHERE userID=?';
+export function selectEntity(entryID: number | undefined): Promise<any> {
+  const selectById = 'SELECT * FROM Entry WHERE entryID=?';
 
   return new Promise((resolve, reject) => {
-    db.get(selectById, [userID], (err: { message: any; }, row: any) => {
+    db.get(selectById, [entryID], (err: { message: any; }, row: any) => {
       if (err) {
         reject(err.message);
       } else {
@@ -58,11 +58,11 @@ export function selectEntity(userID: number | undefined): Promise<any> {
   });
 }
 
-export function selectAll(): Promise<User[]> {
-  const selectAll = 'SELECT * FROM User';
+export function selectAll(): Promise<Entry[]> {
+  const selectAll = 'SELECT * FROM Entry';
 
-  return new Promise<User[]>((resolve, reject) => {
-    db.all(selectAll, [], (err: { message: any; }, rows: User[]) => {
+  return new Promise<Entry[]>((resolve, reject) => {
+    db.all(selectAll, [], (err: { message: any; }, rows: Entry[]) => {
       if (err) {
         reject(err.message);
       } else {
@@ -72,8 +72,8 @@ export function selectAll(): Promise<User[]> {
   });
 }
 
-export function deleteUser(id: number): Promise<any> {
-  const deleteQuery = 'DELETE FROM User WHERE userID=?';
+export function deleteEntry(id: number): Promise<any> {
+  const deleteQuery = 'DELETE FROM Entry WHERE entryID=?';
   return new Promise((resolve, reject) => {
     db.run(deleteQuery, id, (err: { message: any; }) => {
       if (err) {
