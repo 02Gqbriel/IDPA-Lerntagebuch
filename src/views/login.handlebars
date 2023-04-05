@@ -1,0 +1,22 @@
+<form id='form' action='/api/auth/login' method='post'>
+	<h1>Login</h1>
+
+	<fieldset>
+		<label for='username'>Benutzername</label>
+		<input type='text' name='username' id='username' required />
+
+		<label for='password'>Passwort</label>
+		<input type='password' name='password' id='password' required />
+
+		<span id='error-container'> </span>
+	</fieldset>
+
+	<span id='switch'>
+		haben sie kein Konto,
+		<a href='/register'>registrieren</a>
+	</span>
+
+	<button id='submit' type='submit'>einsenden</button>
+</form>
+
+<script src='/js/login.js'></script>

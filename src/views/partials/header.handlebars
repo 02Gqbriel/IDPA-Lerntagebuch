@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="/css/header.css">
+
+<header id="header">
+    <h1>Lerntagebuch</h1>
+
+    <nav>
+        {{#if loggedIn}}
+        <span>
+            {{username}}
+        </span>
+        {{else}}
+        <a id="register" class="nav-item" href="/register">register</a>
+
+        <a id="login" class="nav-item" href="/login">login</a>
+        {{/if}}
+    </nav>
+</header>

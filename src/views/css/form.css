@@ -55,3 +55,20 @@ option:hover {
 	font-size: smaller;
 	color: red;
 }
+
+#return {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	color: #262626;
+	text-decoration: none;
+	padding: 20px 15px;
+}
+
+#return > svg {
+	width: 25px;
+	height: 25px;
+}

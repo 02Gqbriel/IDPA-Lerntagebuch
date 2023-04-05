@@ -8,10 +8,10 @@ async function jwt(ev) {
 
 	if (exp == null) {
 		if (
-			window.location.pathname !== '/login.html' &&
-			window.location.pathname !== '/register.html'
+			window.location.pathname !== '/login' &&
+			window.location.pathname !== '/register'
 		) {
-			window.location.replace('/login.html');
+			window.location.replace('/login');
 		}
 	}
 
