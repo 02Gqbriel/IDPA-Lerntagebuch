@@ -1,0 +1,29 @@
+<form id='form' action='/api/auth/register' method='post' enctype='multipart/form-data'>
+	<h1>Registrieren</h1>
+
+	<fieldset>
+		<label for='username'>Benutzername</label>
+		<input type='text' name='username' id='username' required />
+
+		<label for='password'>Passwort</label>
+		<input type='password' name='password' id='password' required />
+
+		<label for='role'>Benutzertyp</label>
+		<select name='role' id='role'>
+			<option value='student'>Lernende/r</option>
+			<option value='teacher'>Lehrperson</option>
+			<option value='firm'>Lehrbetrieb</option>
+		</select>
+
+		<span id='error-container'> </span>
+	</fieldset>
+
+	<span id='switch'>
+		haben sie schon ein Konto,
+		<a href='/login'>einloggen</a>
+	</span>
+
+	<button id='submit' type='submit'>einsenden</button>
+</form>
+
+<script src='/js/register.js'></script>

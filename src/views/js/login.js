@@ -1,4 +1,4 @@
-document.getElementById('form').onsubmit = async ev => {
+document.getElementById('form').onsubmit = async (ev) => {
 	ev.preventDefault();
 
 	const username = document.getElementById('username').value;
@@ -22,7 +22,7 @@ document.getElementById('form').onsubmit = async ev => {
 		sessionStorage.setItem('token', token);
 		sessionStorage.setItem('expires', expires);
 
-		return window.location.replace('/index.html');
+		return window.location.replace('/');
 	}
 
 	ev.target.reset();

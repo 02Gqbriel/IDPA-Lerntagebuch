@@ -1,5 +1,5 @@
 tinymce.init({
-	selector: 'textarea#tinymce',
+	selector: '#tinymce',
 	base_url: '/tinymce',
 	suffix: '.min',
 	promotion: false,
@@ -7,6 +7,6 @@ tinymce.init({
 	toolbar:
 		'undo redo | styles | bold italic | link image | alignleft aligncenter alignright alignjustify | outdent indent | autosave | searchreplace',
 	auto_focus: 'element1',
-	resize: false,
+	resize: true,
 	height: '100%',
 });
