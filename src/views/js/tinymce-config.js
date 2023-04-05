@@ -7,6 +7,6 @@ tinymce.init({
 	toolbar:
 		'undo redo | styles | bold italic | link image | alignleft aligncenter alignright alignjustify | outdent indent | autosave | searchreplace',
 	auto_focus: 'element1',
-	resize: true,
+	resize: false,
 	height: '100%',
 });

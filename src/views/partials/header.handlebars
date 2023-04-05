@@ -3,15 +3,42 @@
 <header id="header">
     <h1>Lerntagebuch</h1>
 
-    <nav>
-        {{#if loggedIn}}
-        <span>
-            {{username}}
-        </span>
-        {{else}}
-        <a id="register" class="nav-item" href="/register">register</a>
+    <nav id="nav">
 
-        <a id="login" class="nav-item" href="/login">login</a>
-        {{/if}}
+        <script>
+            (async () => {
+                const nav = document.getElementById("nav");
+
+                const token = sessionStorage.getItem("token");
+
+                if (token == undefined) {
+                    nav.innerHTML = `
+                    <a id="register" class="nav-item" href="/register">register</a>
+
+                     <a id="login" class="nav-item" href="/login">login</a>
+                `
+                }
+
+                const res = await fetch("/api/auth/verify", { headers: { "Authorization": token } })
+
+
+                if (res.ok) {
+                    nav.innerHTML = `<button id="logout" class="nav-item">logout</a>`
+                } else {
+                    nav.innerHTML = `
+                    <a id="register" class="nav-item" href="/register">register</a>
+
+                     <a id="login" class="nav-item" href="/login">login</a>
+                `
+                }
+            })()
+
+            window.addEventListener("load", async () => {
+                const logout = document.getElementById("logout");
+            })
+        </script>
+
     </nav>
+
+
 </header>
