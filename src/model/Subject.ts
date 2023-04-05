@@ -1,25 +1,24 @@
 export class Subject {
-    private subjectID: number;
+    private subjectID!: number;
     private name: string;
   
-    constructor(subjectID: number, name: string) {
-      this.subjectID = subjectID;
+    constructor(name: string) {
       this.name = name;
     }
   
-    get getSubjectID(): number {
+    public getSubjectID(): number {
       return this.subjectID;
     }
   
-    set setSubjectID(subjectID: number) {
-      this.subjectID = subjectID;
+    public setSubjectID(id: number) {
+      this.subjectID = id;
     }
   
-    get getName(): string {
+    public getName(): string {
       return this.name;
     }
   
-    set setName(name: string) {
+    public setName(name: string) {
       this.name = name;
     }
   }
