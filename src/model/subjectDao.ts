@@ -1,4 +1,9 @@
-//import sqlite3 from 'sqlite3';
+/**
+ * data access object for a subject  
+ * 
+ * author: Nimai Leuenberger
+ */
+
 const sqlite3 = require('sqlite3').verbose();
 import { Subject } from "./Subject";
 
@@ -6,7 +11,12 @@ const path = require('path');
 const dbPath = path.join(__dirname, '..', 'database', 'learndiary.db');
 const db = new sqlite3.Database(dbPath);
 
-
+/**
+ * inserts a subject into the database
+ * 
+ * @param subject 
+ * @returns Promise: with the id of the inserted subject or an error message
+ */
 export function insertSubject(subject: Subject): Promise<any> {
   const insert = 'INSERT INTO Subject (name) VALUES (?)';
   const selectQuery = 'SELECT last_insert_rowid() as id';
@@ -29,6 +39,13 @@ export function insertSubject(subject: Subject): Promise<any> {
   });
 }
 
+/**
+ * updates a subject in the database
+ * 
+ * @param subjectID 
+ * @param name 
+ * @returns Promise: with 'worked' or an error massage
+ */
 export function updateSubject(subjectID: number, name: string): Promise<String> {
   const update = 'UPDATE Subject SET name=? WHERE subjectID=?';
   
@@ -44,6 +61,12 @@ export function updateSubject(subjectID: number, name: string): Promise<String> 
   });
 }
 
+/**
+ * selects an entity of the subject table
+ * 
+ * @param subjectID to select entity 
+ * @returns Promise: with the wanted entity or an error message
+ */
 export function selectEntity(subjectID: number | undefined): Promise<any> {
   const selectById = 'SELECT * FROM Subject WHERE subjectID=?';
 
@@ -58,6 +81,11 @@ export function selectEntity(subjectID: number | undefined): Promise<any> {
   });
 }
 
+/**
+ * selects all subjects 
+ * 
+ * @returns Promise: with all rows of the table or an error message
+ */
 export function selectAll(): Promise<Subject[]> {
   const selectAll = 'SELECT * FROM Subject';
 
@@ -72,6 +100,12 @@ export function selectAll(): Promise<Subject[]> {
   });
 }
 
+/**
+ * deletes a subject
+ * 
+ * @param id 
+ * @returns Promise: with 'worked' or an error message
+ */
 export function deleteSubject(id: number): Promise<any> {
   const deleteQuery = 'DELETE FROM Subject WHERE subjectID=?';
   return new Promise((resolve, reject) => {

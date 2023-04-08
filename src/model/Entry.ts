@@ -1,3 +1,9 @@
+/*
+* model class of an entry in the learn diary 
+* 
+* author: Nimai Leuenberger
+*/
+
 import {Subject} from "./Subject";
 
 export class Entry {
@@ -6,7 +12,15 @@ export class Entry {
     private date!: Date;
     private content: string;
     private subject: Subject;    
-  
+    
+    /**
+     * constructor for an entry
+     * 
+     * @param title 
+     * @param date 
+     * @param content 
+     * @param subject 
+     */
     constructor(title: string, date: Date, content: string, subject: Subject) {
       this.title = title;
       this.date = date;
@@ -14,39 +28,74 @@ export class Entry {
       this.subject = subject;
     }
     
+    /**
+     * @returns entryID
+     */
     public getEntryID(): number {
         return this.entryID;
     }
+
+    /**
+     * @param id to set the entryID
+     */
     public setEntryID(id: number) {
         this.entryID = id;
     }
 
+    /**
+     * @returns title
+     */
     public getTitle(): string {
         return this.title;
     }
+
+    /**
+     * @param title to set the title
+     */
     public setTitle(title: string) {
         this.title = title;
     }  
 
+    /**
+     * @returns date
+     */
     public getDate(): Date {
         return this.date;
     }
+
+    /**
+     * @param date to set the date
+     */
     public setDate(date: Date) {
         this.date = date;
     }
 
+    /**
+     * @returns content
+     */
     public getContent(): string {
         return this.content;
     }
+
+    /**
+     * @param content to set the content
+     */
     public setContent(content: string) {
         this.content = content;
     }
 
+    /**
+     * @returns subject
+     */
     public getSubject(): Subject {
         return this.subject;
     }
-    public setSubject(value: Subject) {
-        this.subject = value;
+
+    /**
+     * @param subject to set the subject
+     */
+    public setSubject(subject: Subject) {
+        this.subject = subject;
     }
   }
   

@@ -1,4 +1,10 @@
-// type "node database.js" to run this file and create database
+/*
+* creates the database 
+* 
+* type "node database.js" to run this file and create database
+* 
+* author: Nimai Leuenberger 
+*/
 
 const sqlite3 = require('sqlite3').verbose();
 
@@ -16,19 +22,7 @@ db.run('CREATE TABLE IF NOT EXISTS Subject (' +
 db.run('CREATE TABLE IF NOT EXISTS Entry (' +
             'entryID INTEGER PRIMARY KEY AUTOINCREMENT,' +
             'subjectID INTEGER NOT NULL,' +
-            'title varchar(255),' +
+            'title varchar(max),' +
             'date DATE,' +
             'content varchar(255),' +
             'FOREIGN KEY(subjectID) REFERENCES Subject(subjectID));');
-
-// query data to check the tables
-db.all("SELECT name FROM sqlite_master WHERE type='table'", function(err, tables) {
-    if (err) {
-      console.error(err.message);
-    } else {
-      console.log("Tables in the database:");
-      tables.forEach(function(table) {
-        console.log(table.name);
-      });
-    }
-  });

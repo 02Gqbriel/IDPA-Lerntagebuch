@@ -1,4 +1,9 @@
-//import sqlite3 from 'sqlite3';
+/**
+ * data access object for a user  
+ * 
+ * author: Nimai Leuenberger
+ */
+
 const sqlite3 = require('sqlite3').verbose();
 import { User } from "./User";
 
@@ -6,7 +11,12 @@ const path = require('path');
 const dbPath = path.join(__dirname, '..', 'database', 'learndiary.db');
 const db = new sqlite3.Database(dbPath);
 
-
+/**
+ * inserts a user into the database
+ * 
+ * @param user 
+ * @returns Promise: with the id of the inserted user or an error message
+ */
 export function insertUser(user: User): Promise<any> {
   const insert = 'INSERT INTO User (username, password) VALUES (?,?)';
   const selectQuery = 'SELECT last_insert_rowid() as id';
@@ -29,6 +39,14 @@ export function insertUser(user: User): Promise<any> {
   });
 }
 
+/**
+ * updates a user in the database
+ * 
+ * @param userID 
+ * @param username 
+ * @param password 
+ * @returns Promise: with 'worked' or an error massage
+ */
 export function updateUser(userID: number, username: string, password: string): Promise<String> {
   const update = 'UPDATE User SET username=?, password=? WHERE userID=?';
   
@@ -44,6 +62,12 @@ export function updateUser(userID: number, username: string, password: string): 
   });
 }
 
+/**
+ * selects an entity of the user table
+ * 
+ * @param userID to select entity 
+ * @returns Promise: with the wanted entity or an error message
+ */
 export function selectEntity(userID: number | undefined): Promise<any> {
   const selectById = 'SELECT * FROM User WHERE userID=?';
 
@@ -58,6 +82,11 @@ export function selectEntity(userID: number | undefined): Promise<any> {
   });
 }
 
+/**
+ * selects all users 
+ * 
+ * @returns Promise: with all rows of the table or an error message
+ */
 export function selectAll(): Promise<User[]> {
   const selectAll = 'SELECT * FROM User';
 
@@ -72,6 +101,12 @@ export function selectAll(): Promise<User[]> {
   });
 }
 
+/**
+ * deletes a user
+ * 
+ * @param id 
+ * @returns Promise: with 'worked' or an error message
+ */
 export function deleteUser(id: number): Promise<any> {
   const deleteQuery = 'DELETE FROM User WHERE userID=?';
   return new Promise((resolve, reject) => {
