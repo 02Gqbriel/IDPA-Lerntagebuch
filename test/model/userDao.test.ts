@@ -7,9 +7,10 @@
 import { expect } from 'chai';
 import { insertUser, selectAll, selectEntity, updateUser, deleteUser } from '../../src/model/userDao';
 import { User } from '../../src/model/User';
+import exp from 'node:constants';
 
-const user = new User("ammanna", "password");
-const user2 = new User("mustermax", "musterpasswort");
+const user = new User("ammanna", "password", "Schüler");
+const user2 = new User("mustermax", "musterpasswort", "Lehrer");
 
 /**
  * test of function insertUser 
@@ -30,7 +31,7 @@ describe('insertUser', () => {
  */
 describe('updateUser', () => {
   it('should update the wanted user with the correct data',async () => {
-    const result = await updateUser(user.getUserID(), user2.getUsername(), user2.getPassword());
+    const result = await updateUser(user.getUserID(), user2.getUsername(), user2.getPassword(), user2.getRole());
     expect(result).to.equal('worked');
   })
 });
@@ -46,6 +47,7 @@ describe('selectEntity', () => {
       expect(row.username).to.equal(user.getUsername());
       expect(row.password).to.equal(user.getPassword());
       expect(row.userID).to.equal(user.getUserID());
+      expect(row.role).to.equal(user.getRole());
     });
   });
 }); 
@@ -64,6 +66,7 @@ describe('selectAll', () => {
     expect(usersList[0]).to.have.property('userID');
     expect(usersList[0]).to.have.property('username');
     expect(usersList[0]).to.have.property('password');
+    expect(usersList[0]).to.have.property('role');
   })
 })
 

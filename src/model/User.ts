@@ -8,6 +8,7 @@ export class User {
     username: string;
     password: string;
     userID!: number;
+    role: 'Schüler' | 'Lehrer' | 'Lehrbetrieb';
 
     /**
      * constructor for a user 
@@ -15,9 +16,10 @@ export class User {
      * @param username 
      * @param password 
      */
-    constructor(username: string, password: string) {
+    constructor(username: string, password: string, role: 'Schüler' | 'Lehrer' | 'Lehrbetrieb') {
       this.username = username;
       this.password = password;
+      this.role = role;
     }
     
     /**
@@ -60,6 +62,20 @@ export class User {
      */
     public setPassword(password: string) {
       this.password = password;
+    }
+
+    /**
+     * @returns role
+     */
+    public getRole(): 'Schüler' | 'Lehrer' | 'Lehrbetrieb' {
+      return this.role;
+    }
+    
+    /**
+     * @param role to set the role
+     */
+    public setRole(role: 'Schüler' | 'Lehrer' | 'Lehrbetrieb') {
+      this.role = role;
     }
   }
   
