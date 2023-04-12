@@ -20,17 +20,19 @@ router.post('/login', upload.none(), async (req, res) => {
 
 	const users = await UserDao.selectAll();
 
-	if (!users.some(v => v.username === username)) {
+	console.log(users);
+
+	if (!users.some(v => v.getUsername() === username)) {
 		return res.status(404).send('User not found');
 	}
 
-	const user = users.find(v => v.username === username);
+	const user = users.find(v => v.getUsername() === username);
 
-	if (user?.password == undefined) {
-		return res.status(409).send('User account is incomplete');
+	if (user == undefined) {
+		return res.status(409).send('User not found');
 	}
 
-	if (!comparePasswords(password, user.password)) {
+	if (!comparePasswords(password, user.getPassword())) {
 		return res.status(400).send("Password doesn't match username");
 	}
 
@@ -43,7 +45,7 @@ router.post('/register', upload.none(), async (req, res) => {
 	const { username, password, role } = req.body as {
 		username: string;
 		password: string;
-		role: 'student' | 'firm' | 'teacher';
+		role: 'Schüler' | 'Lehrbetrieb' | 'Lehrer';
 	};
 
 	if (username == null || password == null || role == null) {
@@ -56,7 +58,7 @@ router.post('/register', upload.none(), async (req, res) => {
 		return res.status(404).send('Username is already taken');
 	}
 
-	await UserDao.insertUser(new User(username, hashPassword(password)));
+	await UserDao.insertUser(new User(username, hashPassword(password), role));
 
 	res.send('ok');
 });
@@ -83,8 +85,11 @@ router.get('/info', verifyToken, async (req, res) => {
 	const users = await UserDao.selectAll();
 
 	for (const user of users) {
-		if (user.username == username) {
-			return res.json({ username: user.username, userID: user.userID });
+		if (user.getUsername() == username) {
+			return res.json({
+				username: user.getUsername(),
+				userID: user.getUserID(),
+			});
 		}
 	}
 
