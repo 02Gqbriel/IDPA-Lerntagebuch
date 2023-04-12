@@ -40,7 +40,7 @@ export function reverseToken(token: string) {
 
 		return data;
 	} catch (error) {
-		console.error(error);
+		console.error('JsonWebTokenError: jwt malformed');
 
 		return null;
 	}
@@ -64,7 +64,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 
 		next();
 	} catch (error) {
-		console.error(error);
+		console.error('JsonWebTokenError: jwt malformed');
 		return res.sendStatus(400);
 	}
 }

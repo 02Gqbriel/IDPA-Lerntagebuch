@@ -1,22 +1,11 @@
 import { Router } from 'express';
-import { reverseToken } from '../util/jwt';
+import { reverseToken, verifyToken } from '../util/jwt';
+import { selectEntity } from '../model/userDao';
 
 export const router = Router();
 
 router.get('/', (req, res) => {
-	const token = req.headers['authorization'];
-
-	if (token == undefined) {
-		return res.render('index', { loggedIn: false });
-	}
-
-	const username = reverseToken(token);
-
-	if (username == null) {
-		return res.render('index', { loggedIn: false });
-	}
-
-	return res.render('index', { loggedIn: true, username });
+	return res.render('index', { layout: 'main' });
 });
 
 router.get('/login', (req, res) => {
@@ -25,4 +14,12 @@ router.get('/login', (req, res) => {
 
 router.get('/register', (req, res) => {
 	res.render('register', { layout: 'auth' });
+});
+
+router.get('/editor/:id', async (req, res) => {
+	const id = Number(req.params.id);
+
+	const user = await selectEntity(id);
+
+	res.render('edit');
 });

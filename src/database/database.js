@@ -7,9 +7,12 @@
 */
 
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+
+const dbPath = path.join(__dirname, 'learndiary.db');
 
 // open the database (or create database in current dir)
-const db = new sqlite3.Database('./learndiary.db');
+const db = new sqlite3.Database(dbPath);
 
 // create tables
 db.run('CREATE TABLE IF NOT EXISTS User (' +
