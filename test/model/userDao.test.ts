@@ -7,7 +7,6 @@
 import { expect } from 'chai';
 import { insertUser, selectAll, selectEntity, updateUser, deleteUser } from '../../src/model/userDao';
 import { User } from '../../src/model/User';
-import exp from 'node:constants';
 
 const user = new User("ammanna", "password", "Schüler");
 const user2 = new User("mustermax", "musterpasswort", "Lehrer");
@@ -61,14 +60,22 @@ describe('selectEntity', () => {
 describe('selectAll', () => {
   it('should return all users in database',async () => {
     const usersList = await selectAll();
-    expect(usersList).to.be.an('array');
-    expect(usersList.length).to.be.greaterThan(0);
-    expect(usersList[0]).to.have.property('userID');
-    expect(usersList[0]).to.have.property('username');
-    expect(usersList[0]).to.have.property('password');
-    expect(usersList[0]).to.have.property('role');
+    expect(usersList[0].getUserID()).to.equal(user2.getUserID());
+    expect(usersList[0].getUsername()).to.equal(user2.getUsername());
+    expect(usersList[0].getPassword()).to.equal(user2.getPassword());
+    expect(usersList[0].getRole()).to.equal(user2.getRole());
   })
-})
+});
+/**
+ * return sollte so aussehen: [
+  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
+  User { username: 'log', password: 'lef', role: 'Schüler' }
+]
+[
+  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
+  User { username: 'log', password: 'lef', role: 'Schüler' }
+]
+ */
 
 /**
  * test of function deleteUser 

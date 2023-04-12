@@ -21,6 +21,11 @@ export class User {
       this.password = password;
       this.role = role;
     }
+
+    static fromObject(obj: any) {
+      const user = new User(obj.username, obj.password, obj.role);
+      return user;
+    }
     
     /**
      * @param id to set the userID

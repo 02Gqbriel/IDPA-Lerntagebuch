@@ -95,7 +95,7 @@ export function selectAll(): Promise<User[]> {
       if (err) {
         reject(err.message);
       } else {
-        resolve(rows);
+        resolve(rows.map(row => User.fromObject(row)));
       }
     });
   });
