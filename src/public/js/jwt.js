@@ -4,8 +4,6 @@ window.loggedIn = false;
 async function jwt(ev) {
 	const exp = sessionStorage.getItem('expires');
 
-	console.log(window.location.pathname);
-
 	if (exp == null || exp == undefined) {
 		return;
 	}

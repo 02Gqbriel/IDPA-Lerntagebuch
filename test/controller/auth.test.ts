@@ -4,6 +4,9 @@ import { server } from '../..//src/main';
 
 const PORT = process.env.PORT ?? 3001;
 
+const username = 'z-user-' + Date.now();
+const password = 'geheim';
+
 describe('Server | Auth', () => {
 	before(function () {
 		if (!server.listening) {
@@ -12,31 +15,27 @@ describe('Server | Auth', () => {
 	});
 
 	it('Soll einen neuen User registieren', async () => {
-		const res = await spec()
+		await spec()
 			.post(`http://localhost:${PORT}/api/auth/register`)
 			.withMultiPartFormData({
-				username: 'testUser',
-				password: 'geheim',
+				username,
+				password,
 				role: 'Schüler',
 			})
 			.expectStatus(200)
-			.expectHeaderContains('content-type', 'text/plain');
-
-		console.log(res);
+			.expectHeaderContains('content-type', 'text/html');
 	});
 
 	it('Soll einen User einloggen und Token und Ablaufdatum zurückgeben', async () => {
-		const res = await spec()
+		await spec()
 			.post(`http://localhost:${PORT}/api/auth/login`)
 			.withMultiPartFormData({
-				username: 'testUser',
-				password: 'geheim',
+				username,
+				password,
 			})
 			.expectStatus(200)
 			.expectHeaderContains('content-type', 'application/json')
 			.expectJsonMatch({ token: string(), expires: int() });
-
-		console.log(res);
 	});
 
 	after(() => {

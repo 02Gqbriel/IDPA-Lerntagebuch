@@ -20,8 +20,6 @@ router.post('/login', upload.none(), async (req, res) => {
 
 	const users = await UserDao.selectAll();
 
-	console.log(users);
-
 	if (!users.some(v => v.getUsername() === username)) {
 		return res.status(404).send('User not found');
 	}
