@@ -5,10 +5,10 @@
 */
 
 export class User {
-    username: string;
-    password: string;
-    userID!: number;
-    role: 'Schüler' | 'Lehrer' | 'Lehrbetrieb';
+    private username: string;
+    private password: string;
+    private userID!: number;
+    private role: 'Schüler' | 'Lehrer' | 'Lehrbetrieb';
 
     /**
      * constructor for a user 
