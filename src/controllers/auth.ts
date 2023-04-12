@@ -2,13 +2,11 @@ import { Router } from 'express';
 import multer from 'multer';
 import { comparePasswords, hashPassword } from '../util/hash';
 import { createToken, reverseToken, verifyToken } from '../util/jwt';
+import * as UserDao from '../model/userDao';
+import { User } from '../model/User';
 
 export const router = Router();
 const upload = multer();
-
-const users: {
-	[key: string]: { passwordHash: string; role: 'student' | 'firm' | 'teacher' };
-} = {};
 
 router.post('/login', upload.none(), async (req, res) => {
 	const { username, password } = req.body as {
@@ -20,11 +18,19 @@ router.post('/login', upload.none(), async (req, res) => {
 		return res.status(400).send('Invalid Body');
 	}
 
-	if (!users[username]) {
+	const users = await UserDao.selectAll();
+
+	if (!users.some(v => v.username === username)) {
 		return res.status(404).send('User not found');
 	}
 
-	if (!comparePasswords(password, users[username].passwordHash)) {
+	const user = users.find(v => v.username === username);
+
+	if (user?.password == undefined) {
+		return res.status(409).send('User account is incomplete');
+	}
+
+	if (!comparePasswords(password, user.password)) {
 		return res.status(400).send("Password doesn't match username");
 	}
 
@@ -44,11 +50,13 @@ router.post('/register', upload.none(), async (req, res) => {
 		return res.status(400).send('Invalid Body');
 	}
 
-	if (users[username]) {
+	const users = await UserDao.selectAll();
+
+	if (users.some(v => v.getUsername() === username)) {
 		return res.status(404).send('Username is already taken');
 	}
 
-	users[username] = { passwordHash: hashPassword(password), role };
+	await UserDao.insertUser(new User(username, hashPassword(password)));
 
 	res.send('ok');
 });
@@ -67,4 +75,18 @@ router.get('/refresh', verifyToken, async (req, res) => {
 
 router.get('/verify', verifyToken, async (req, res) => {
 	res.send('ok');
+});
+
+router.get('/info', verifyToken, async (req, res) => {
+	const username = reverseToken(req.headers['authorization'] ?? '');
+
+	const users = await UserDao.selectAll();
+
+	for (const user of users) {
+		if (user.username == username) {
+			return res.json({ username: user.username, userID: user.userID });
+		}
+	}
+
+	res.status(404).send('not found');
 });

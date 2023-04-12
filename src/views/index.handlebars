@@ -1,11 +1,84 @@
-<div style='flex-grow: 1'>
-	<textarea id='tinymce'>
-		<h1 style='text-decoration: underline;'>Test</h1>
-	</textarea>
+<div class="h-screen flex flex-col max-w-screen-xl w-full mx-auto p-2.5 pt-0 xl:p-0">
+	{{> header}}
+
+	<div id='root' class='flex grow flex-col xl:flex-row justify-between gap-10 items-center'>
+
+		<a id="edit" href='#'
+			class='group grow relative block bg-black w-full xl:w-[40rem] xl:h-[50rem] overflow-hidden'>
+			<img alt='Developer' src='/assets/note.jpg'
+				class='absolute inset-0 h-full w-full object-cover opacity-50 sm:opacity-75 transition-opacity group-hover:opacity-50' />
+
+			<div class='p-4 sm:p-6 lg:p-8'>
+				<p class='text-sm font-medium uppercase tracking-widest text-neutral-400'>
+					schüler
+				</p>
+
+				<p class='text-xl font-bold text-white sm:text-3xl'>Notieren</p>
+
+				<div class='mt-32 sm:mt-48 lg:mt-64 absolute bottom-5'>
+					<div
+						class='sm:translate-y-8 transform sm:opacity-0 transition-all group-hover:translate-y-0 translate-y-0 opacity-100  group-hover:opacity-100 flex items-center gap-3'>
+						<p class='text-white'>
+							Jetzt loslegen
+						</p>
+
+						<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'
+							class='w-8 h-8 fill-white'>
+							<path fill-rule='evenodd'
+								d='M16.72 7.72a.75.75 0 011.06 0l3.75 3.75a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 11-1.06-1.06l2.47-2.47H3a.75.75 0 010-1.5h16.19l-2.47-2.47a.75.75 0 010-1.06z'
+								clip-rule='evenodd'></path>
+						</svg>
+
+					</div>
+				</div>
+			</div>
+		</a>
+
+		<script>
+			const a = document.getElementById("edit");
+			const token = sessionStorage.getItem("token");
+
+			(async () => {
+				const res = await fetch("/api/auth/info", { headers: { "authorization": token } });
+
+				if (res.ok) {
+					const json = await res.json();
+
+					a.href = "/editor/" + json.userID;
+				}
+			})()
+		</script>
+
+		<a href='#' class='group grow relative block bg-black w-full xl:w-[40rem] xl:h-[50rem] overflow-hidden'>
+			<img alt='Developer' src='/assets/review.jpg'
+				class='absolute inset-0 h-full w-full object-cover opacity-50 sm:opacity-75 transition-opacity group-hover:opacity-50' />
+
+			<div class='p-4 sm:p-6 lg:p-8'>
+				<p class='text-sm font-medium uppercase tracking-widest text-neutral-400'>
+					lehrpersonen | lehrbetriebe
+				</p>
+
+				<p class='text-xl font-bold text-white sm:text-3xl'>Überprüfen</p>
+
+				<div class='mt-32 sm:mt-48 lg:mt-64 absolute bottom-5'>
+					<div
+						class='sm:translate-y-8 transform sm:opacity-0 transition-all group-hover:translate-y-0 translate-y-0 opacity-100  group-hover:opacity-100 flex items-center gap-3'>
+						<p class='text-white'>
+							Jetzt loslegen
+						</p>
+
+						<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'
+							class='w-8 h-8 fill-white'>
+							<path fill-rule='evenodd'
+								d='M16.72 7.72a.75.75 0 011.06 0l3.75 3.75a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 11-1.06-1.06l2.47-2.47H3a.75.75 0 010-1.5h16.19l-2.47-2.47a.75.75 0 010-1.06z'
+								clip-rule='evenodd'></path>
+						</svg>
+
+					</div>
+				</div>
+			</div>
+		</a>
+
+	</div>
+
 </div>
-
-<script src='/js/jwt.js'></script>
-
-<script type='application/javascript' src='/tinymce/tinymce.min.js'></script>
-
-<script type='application/javascript' src='/js/tinymce-config.js'></script>
