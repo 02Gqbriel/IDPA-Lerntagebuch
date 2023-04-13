@@ -3,7 +3,6 @@ import { router as api } from "./controllers/api";
 import { router as view } from "./controllers/view";
 import { join } from "path";
 import logger from "morgan";
-import cookieParser from "cookie-parser";
 import compression from "compression";
 import { create } from "express-handlebars";
 
@@ -12,28 +11,21 @@ dotenv.config();
 
 const PORT = process.env.PORT ?? 3000;
 
-const PUBLIC_FOLDER =
-  process.env.MODE === "production"
-    ? join(process.cwd(), "dist", "public")
-    : join(process.cwd(), "src", "public");
+const PUBLIC_FOLDER = join(process.cwd(), "src", "public");
 
-const VIEWS_FOLDER =
-  process.env.MODE === "production"
-    ? join(process.cwd(), "dist", "public")
-    : join(process.cwd(), "src", "views");
+const VIEWS_FOLDER = join(process.cwd(), "src", "views");
 
-const TINYMCE =
-  process.env.MODE === "production"
-    ? join(PUBLIC_FOLDER, "tinymce")
-    : join(process.cwd(), "node_modules", "tinymce");
+const TINYMCE = join(process.cwd(), "node_modules", "tinymce");
 
 const app = express();
 
-app.use(logger("dev"));
+app.use(logger(process.env.MODE === "production" ? "combined" : "dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(compression());
+
+if (process.env.MODE === "production") {
+  app.use(compression());
+}
 
 const hbs = create({});
 
