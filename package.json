@@ -5,10 +5,14 @@
 	"main": "index.js",
 	"private": "true",
 	"scripts": {
+		"database": "node src/database/database.js",
 		"dev": "nodemon -r dotenv/config ./src/main.ts",
 		"build": "node esbuild.mjs",
 		"start": "cross-env MODE=production node dist/index.js",
-		"test": "cross-env SALT=test mocha -r ts-node/register test/**/*"
+		"test": "cross-env SALT=test TOKEN_SECRET=secret mocha -r ts-node/register test/**/*",
+		"predev": "npm run database",
+		"prebuild": "npm run database",
+		"pretest": "npm run database"
 	},
 	"repository": {
 		"type": "git",

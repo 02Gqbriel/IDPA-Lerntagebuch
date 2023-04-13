@@ -1,0 +1,46 @@
+<script>
+    (async () => {
+        const token = sessionStorage.getItem('token');
+
+        const res = await fetch('/api/auth/verify', {
+            headers: { Authorization: token },
+        });
+
+        if (!res.ok) {
+            return window.location.assign("/login")
+        }
+
+        const infoRes = await fetch('/api/auth/info', {
+            headers: { Authorization: token },
+        });
+
+        if (!infoRes.ok) {
+            return window.location.assign("/login")
+        }
+
+        const info = await infoRes.json();
+
+        const id = window.location.pathname.split("/").reverse()[0];
+
+        console.log(info, id)
+
+        if (id != info.userID) {
+            return window.location.assign("/")
+        }
+
+        const root = document.getElementById("root")
+
+        root.classList.replace("hidden", "flex")
+    })()
+
+</script>
+
+<div id="root" class="hidden h-screen flex-col">
+    <div class="fixed top-0 right-0 z-50 p">
+        header
+    </div>
+
+
+    {{> editor }}
+
+</div>

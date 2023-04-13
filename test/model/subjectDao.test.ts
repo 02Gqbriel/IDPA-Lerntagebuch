@@ -1,4 +1,8 @@
-//mocha.timeout(7000); --> mocha is not define 
+/**
+ * tests the data access object of subject 
+ * 
+ * author: Nimai Leuenberger 
+ */
 
 import { expect } from 'chai';
 import { insertSubject, selectAll, selectEntity, updateSubject, deleteSubject } from '../../src/model/subjectDao';
@@ -7,7 +11,11 @@ import { Subject } from '../../src/model/Subject';
 const subject = new Subject("Mathe");
 const subject2 = new Subject("Franz");
 
-
+/**
+ * test of function insertSubject 
+ * 
+ * return value should be a number (because if it failed it would be a error message --> string)
+ */
 describe('insertSubject', () => {
   it('should insert a subject into the database', async () => {
     const newSubjectID = await insertSubject(subject);
@@ -15,6 +23,11 @@ describe('insertSubject', () => {
   });
 });
 
+/**
+ * test of function updateSubject
+ * 
+ * return value should equal 'worked' 
+ */
 describe('updateSubject', () => {
   it('should update the wanted subject with the correct data',async () => {
     const result = await updateSubject(subject.getSubjectID(), subject2.getName());
@@ -22,6 +35,11 @@ describe('updateSubject', () => {
   })
 });
 
+/**
+ * test of function selectEntity 
+ * 
+ * attributes of return value should equal the attributes of the wanted entity
+ */
 describe('selectEntity', () => {
   it('should return the correct subject',async () => {
     selectEntity(subject.getSubjectID()).then((row) => {
@@ -31,6 +49,12 @@ describe('selectEntity', () => {
   });
 }); 
 
+/**
+ * test of function selectAll 
+ * 
+ * return value should be an array, have a greater length than 0 
+ *    and have the same properties as subject 
+ */
 describe('selectAll', () => {
   it('should return all subjects in database',async () => {
     const subjectsList = await selectAll();
@@ -41,6 +65,11 @@ describe('selectAll', () => {
   })
 })
 
+/**
+ * test of function deleteSubject 
+ * 
+ * return value should equal 'worked'
+ */
 describe('deleteSubject', () => {
   it('should delete the subject with given id',async () => {
     const result = await deleteSubject(1);

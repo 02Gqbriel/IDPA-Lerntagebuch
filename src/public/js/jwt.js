@@ -4,15 +4,8 @@ window.loggedIn = false;
 async function jwt(ev) {
 	const exp = sessionStorage.getItem('expires');
 
-	console.log(window.location.pathname);
-
-	if (exp == null) {
-		if (
-			window.location.pathname !== '/login' &&
-			window.location.pathname !== '/register'
-		) {
-			window.location.replace('/login');
-		}
+	if (exp == null || exp == undefined) {
+		return;
 	}
 
 	if (Date.now() / 1000 >= exp) {
@@ -20,8 +13,6 @@ async function jwt(ev) {
 		sessionStorage.removeItem('token');
 		return;
 	}
-
-	console.log(exp - Math.round(Date.now() / 1000));
 
 	setTimeout(async () => {
 		const token = sessionStorage.getItem('token');

@@ -15,6 +15,11 @@ const PORT = process.env.PORT ?? 3000;
 const PUBLIC_FOLDER =
   process.env.MODE === "production"
     ? join(process.cwd(), "dist", "public")
+    : join(process.cwd(), "src", "public");
+
+const VIEWS_FOLDER =
+  process.env.MODE === "production"
+    ? join(process.cwd(), "dist", "public")
     : join(process.cwd(), "src", "views");
 
 const TINYMCE =
@@ -36,7 +41,7 @@ app.engine("handlebars", hbs.engine);
 
 app.set("view engine", "handlebars");
 
-app.set("views", PUBLIC_FOLDER);
+app.set("views", VIEWS_FOLDER);
 
 if (process.env.MODE == "production") {
   app.enable("view cache");
