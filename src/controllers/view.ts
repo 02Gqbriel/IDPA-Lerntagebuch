@@ -24,6 +24,6 @@ router.get("/editor/:id", async (req, res) => {
   res.render("edit");
 });
 
-router.get("*", (req, res) => {
+router.get("/*", (req, res) => {
   res.status(404).render("404");
 });

@@ -51,9 +51,9 @@ app.use("/api", api);
 
 app.use("/tinymce", express.static(TINYMCE));
 
-app.use(view);
-
 app.use(express.static(PUBLIC_FOLDER));
+
+app.use(view);
 
 export const server = app.listen(PORT, () => {
   console.log("> Server running on http://127.0.0.1:3000/");
