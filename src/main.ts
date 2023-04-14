@@ -5,6 +5,7 @@ import { join } from "path";
 import logger from "morgan";
 import compression from "compression";
 import { create } from "express-handlebars";
+import { createWriteStream } from "fs";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -15,11 +16,22 @@ const PUBLIC_FOLDER = join(process.cwd(), "src", "public");
 
 const VIEWS_FOLDER = join(process.cwd(), "src", "views");
 
+const LOG_FOLDER = join(process.cwd(), "logs", `access.log`);
+
 const TINYMCE = join(process.cwd(), "node_modules", "tinymce");
 
 const app = express();
 
-app.use(logger(process.env.MODE === "production" ? "combined" : "dev"));
+app.use(
+  logger(process.env.MODE === "production" ? "combined" : "dev", {
+    stream:
+      process.env.MODE === "production"
+        ? createWriteStream(LOG_FOLDER, {
+            flags: "a",
+          })
+        : undefined,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

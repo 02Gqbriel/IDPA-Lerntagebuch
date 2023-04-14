@@ -3,6 +3,7 @@ import * as SubjectDao from "../../src/model/subjectDao";
 import { string, int } from "pactum-matchers";
 import { server } from "../../src/main";
 import { Subject } from "../../src/model/Subject";
+import { token } from "./auth.test";
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -10,7 +11,6 @@ const username = "z-user-" + Date.now();
 const password = "geheim";
 
 let subject: Subject | null = null;
-let token: string | null = null;
 
 describe("Server | Subject", () => {
   before(async function () {
@@ -18,43 +18,17 @@ describe("Server | Subject", () => {
       server.listen(PORT);
     }
 
-    subject = <Subject>(
-      await SubjectDao.insertSubject(new Subject("Mathematik"))
-    );
+    subject = await SubjectDao.insertSubject(new Subject("Mathematik"));
 
-    const formData = new FormData();
-
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("role", "Schüler");
-
-    const res = await fetch(`http://localhost:${PORT}/api/auth/register`, {
-      method: "post",
-      body: formData,
-    });
-
-    if (res.ok) {
-      const formData = new FormData();
-
-      formData.append("username", username);
-      formData.append("password", password);
-
-      const res = await fetch(`http://localhost:${PORT}/api/auth/login`);
-
-      if (res.ok) {
-        const json = await res.json();
-
-        token = json.token;
-      }
-    }
+    console.log(subject);
   });
 
   it("Soll alle Fächer/Themen zurückbekommen", async () => {
-    if (token == null) throw new Error("Thema ist null");
+    if (token == null) throw new Error("Token ist null");
 
     await spec()
       .get(`http://localhost:${PORT}/api/subject/list`)
-      .withBearerToken(token)
+      .withHeaders({ authorization: token })
       .expectStatus(200)
       .expectHeaderContains("content-type", "application/json");
   });
@@ -64,8 +38,8 @@ describe("Server | Subject", () => {
       throw new Error("Thema oder Token ist null");
 
     await spec()
-      .get(`http://localhost:${PORT}/api/subject/list?id=0`)
-      .withBearerToken(token)
+      .get(`http://localhost:${PORT}/api/subject/list?id=${subject}`)
+      .withHeaders({ authorization: token })
       .expectStatus(200)
       .expectHeaderContains("content-type", "application/json");
   });
