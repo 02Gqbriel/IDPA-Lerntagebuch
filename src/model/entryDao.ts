@@ -49,7 +49,7 @@ export function insertEntry(entry: Entry): Promise<any> {
  * @param content 
  * @returns Promise: with 'worked' or an error massage
  */
-export function updateEntry(entryID: number, subjectID: number, title: string, date: Date, content: string): Promise<String> {
+export function updateEntry(entryID: number, subjectID: number, title: string, date: string, content: string): Promise<String> {
   const update = 'UPDATE Entry SET subjectID=?, title=?, date=?, content=? WHERE entryID=?';
   
   return new Promise((resolve, reject) => {
@@ -97,7 +97,7 @@ export function selectAll(): Promise<Entry[]> {
       if (err) {
         reject(err.message);
       } else {
-        resolve(rows);
+        resolve(rows.map(row => Entry.fromObject(row)));
       }
     });
   });

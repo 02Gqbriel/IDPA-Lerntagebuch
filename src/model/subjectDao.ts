@@ -94,7 +94,7 @@ export function selectAll(): Promise<Subject[]> {
       if (err) {
         reject(err.message);
       } else {
-        resolve(rows);
+        resolve(rows.map(row => Subject.fromObject(row)));
       }
     });
   });

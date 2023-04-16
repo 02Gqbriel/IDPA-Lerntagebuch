@@ -22,6 +22,12 @@ export class User {
       this.role = role;
     }
 
+    /**
+     * makes object of any type into object of user
+     * 
+     * @param obj 
+     * @returns user object
+     */
     static fromObject(obj: any) {
       const user = new User(obj.username, obj.password, obj.role);
       return user;

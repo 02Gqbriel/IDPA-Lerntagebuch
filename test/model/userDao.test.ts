@@ -66,16 +66,6 @@ describe('selectAll', () => {
     expect(usersList[0].getRole()).to.equal(user2.getRole());
   })
 });
-/**
- * return sollte so aussehen: [
-  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
-  User { username: 'log', password: 'lef', role: 'Schüler' }
-]
-[
-  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
-  User { username: 'log', password: 'lef', role: 'Schüler' }
-]
- */
 
 /**
  * test of function deleteUser 
