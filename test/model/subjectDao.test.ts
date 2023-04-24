@@ -20,6 +20,7 @@ describe('insertSubject', () => {
   it('should insert a subject into the database', async () => {
     const newSubjectID = await insertSubject(subject);
     expect(newSubjectID).to.be.a('number');
+    expect(newSubjectID).to.equal(subject.getSubjectID());
   });
 });
 
@@ -58,8 +59,9 @@ describe('selectEntity', () => {
 describe('selectAll', () => {
   it('should return all subjects in database',async () => {
     const subjectsList = await selectAll();
-    expect(subjectsList[0].getSubjectID()).to.equal(subject2.getSubjectID());
-    expect(subjectsList[0].getName()).to.equal(subject2.getName());
+    const lastsubject = subjectsList[subjectsList.length - 1];
+    expect(lastsubject.getSubjectID()).to.equal(subject2.getSubjectID());
+    expect(lastsubject.getName()).to.equal(subject2.getName());
   })
 })
 

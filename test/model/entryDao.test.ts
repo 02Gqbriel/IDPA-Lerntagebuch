@@ -11,8 +11,8 @@ import { Entry } from '../../src/model/Entry';
 import { Subject } from '../../src/model/Subject';
 
 const subject = new Subject("Mathe");
-const entry = new Entry("Kurs1", "2022-05-22", "Das ist der Erste Kurs", subject);
-const entry2 = new Entry("Kurs2", "2023-06-11", "Das ist der zweite Kurs", subject);
+const entry = new Entry("Kurs1", "2022-05-22", "Das ist der Erste Kurs", subject.getSubjectID());
+const entry2 = new Entry("Kurs2", "2023-06-11", "Das ist der zweite Kurs", subject.getSubjectID());
 
 /**
  * test of function insertEntry 
@@ -22,9 +22,11 @@ const entry2 = new Entry("Kurs2", "2023-06-11", "Das ist der zweite Kurs", subje
 describe('insertEntry', () => {
   it('should insert a entry into the database', async () => {
     const newSubjectID = await insertSubject(subject);
+    entry.setSubjectID(newSubjectID);
+    entry2.setSubjectID(newSubjectID);
     const newEntryID = await insertEntry(entry);
-    console.log(await selectAll());
     expect(newEntryID).to.be.a('number');
+    expect(newEntryID).to.equal(entry.getEntryID());
   });
 });
 
@@ -35,8 +37,7 @@ describe('insertEntry', () => {
  */
 describe('updateEntry', () => {
   it('should update the wanted entry with the correct data',async () => {
-    const result = await updateEntry(entry.getEntryID(), entry2.getSubject().getSubjectID(), entry2.getTitle(), entry2.getDate(), entry2.getContent());
-    console.log(await selectAll());
+    const result = await updateEntry(entry.getEntryID(), entry2.getSubjectID(), entry2.getTitle(), entry2.getDate(), entry2.getContent());
     expect(result).to.equal('worked');
   })
 });
@@ -49,11 +50,11 @@ describe('updateEntry', () => {
 describe('selectEntity', () => {
   it('should return the correct entry',async () => {
     selectEntity(entry.getEntryID()).then((row) => {
-      expect(row.entryID).to.equal(entry.getEntryID());
-      expect(row.subjectID).to.equal(entry.getSubject().getSubjectID());
-      expect(row.title).to.equal(entry.getTitle());
-      expect(row.date).to.equal(entry.getDate());
-      expect(row.content).to.equal(entry.getContent());
+      expect(row.getEntryID()).to.equal(entry.getEntryID());
+      expect(row.getSubjectID()).to.equal(entry.getSubjectID());
+      expect(row.getTitle()).to.equal(entry.getTitle());
+      expect(row.getDate()).to.equal(entry.getDate());
+      expect(row.getContent()).to.equal(entry.getContent());
     });
   });
 }); 
@@ -66,12 +67,13 @@ describe('selectEntity', () => {
  */
 describe('selectAll', () => {
   it('should return all entrys in database',async () => {                                                             
-    const entrysList = await selectAll();                                                                                                                    
-    expect(entrysList[0].getEntryID()).to.equal(entry.getEntryID());            
-    expect(entrysList[0].getTitle()).to.equal(entry2.getTitle());
-    expect(entrysList[0].getDate()).to.equal(entry2.getDate());
-    expect(entrysList[0].getContent()).to.equal(entry2.getContent());
-    expect(entrysList[0].getSubject()).to.equal(entry2.getSubject());
+    const entrysList = await selectAll();  
+    const lastentry = entrysList[entrysList.length - 1]; 
+    expect(lastentry.getEntryID()).to.equal(entry.getEntryID());            
+    expect(lastentry.getTitle()).to.equal(entry2.getTitle());
+    expect(lastentry.getDate()).to.equal(entry2.getDate());
+    expect(lastentry.getContent()).to.equal(entry2.getContent());
+    expect(lastentry.getSubjectID()).to.equal(entry2.getSubjectID());
   })
 })
 
