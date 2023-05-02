@@ -1,0 +1,20 @@
+body {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	height: 100vh;
+}
+#subjectNav {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#cardContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#card{
+    border-radius: 3px;
+}
