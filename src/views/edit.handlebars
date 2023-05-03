@@ -20,14 +20,6 @@
 
         const info = await infoRes.json();
 
-        const id = window.location.pathname.split("/").reverse()[0];
-
-        console.log(info, id)
-
-        if (id != info.userID) {
-            return window.location.assign("/")
-        }
-
         const root = document.getElementById("root")
 
         root.classList.replace("hidden", "flex")
