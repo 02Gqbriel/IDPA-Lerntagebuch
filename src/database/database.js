@@ -8,7 +8,6 @@
 
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-
 const dbPath = path.join(__dirname, 'learndiary.db');
 
 // open the database (or create database in current dir)
