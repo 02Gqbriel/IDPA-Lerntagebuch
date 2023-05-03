@@ -49,5 +49,42 @@ router.post("/create", verifyToken, upload.none(), async (req, res) => {
     return res.sendStatus(409);
   }
 
+  res.json(result);
+});
+
+router.put("/update", verifyToken, upload.none(), async (req, res) => {
+  const { name, id } = req.body as {
+    id: number | undefined;
+    name: string | undefined;
+  };
+
+  if (name === undefined || id === undefined) {
+    return res.status(400).send("Invalid Body");
+  }
+
+  const result = await SubjectDao.updateSubject(id, name);
+
+  if (result !== "worked") {
+    return res.sendStatus(409);
+  }
+
+  res.sendStatus(200);
+});
+
+router.delete("/delete", verifyToken, async (req, res) => {
+  const { id } = req.query as {
+    id: number | undefined;
+  };
+
+  if (id === undefined) {
+    return res.status(400).send("Invalid Body");
+  }
+
+  const result = await SubjectDao.deleteSubject(id);
+
+  if (result !== "worked") {
+    return res.sendStatus(409);
+  }
+
   res.sendStatus(200);
 });

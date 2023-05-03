@@ -4,26 +4,42 @@ import { token } from "./auth.test";
 
 const PORT = process.env.PORT ?? 3001;
 
-let subject: number | null = null;
+let entry: number | null = null;
 
-describe("Server | Subject", () => {
+describe("Server | Entry", () => {
   before(async function () {
     if (!server.listening) {
       server.listen(PORT);
     }
   });
 
-  it("Soll ein Fach/Thema erstellen", async () => {
+  it("Soll ein Eintrag erstellen", async () => {
     if (token == null) throw new Error("Token ist null");
 
+    const resSub = await fetch(`http://localhost:${PORT}/api/subject/list`, {
+      headers: { authorization: token },
+    });
+
+    if (!resSub.ok) {
+      throw new Error("Couldn't recieve subject");
+    }
+
+    const { subjectID } = (await resSub.json())[0];
+
     const res = await spec()
-      .post(`http://localhost:${PORT}/api/subject/create`)
+      .post(`http://localhost:${PORT}/api/entry/create`)
       .withHeaders({ authorization: token })
-      .withMultiPartFormData({ name: "Mathematik" })
+      .withMultiPartFormData({
+        title: "TestEntry",
+        date: Date.now(),
+        subject: subjectID,
+      })
       .expectStatus(200)
       .expectHeaderContains("content-type", "application/json");
 
-    subject = res.json;
+    console.log(res);
+
+    entry = res.json;
   });
 
   it("Soll alle Fächer/Themen zurückbekommen", async () => {
@@ -37,11 +53,11 @@ describe("Server | Subject", () => {
   });
 
   it("Soll ein Fach/Thema zurückbekommen", async () => {
-    if (subject == null || token == null)
+    if (entry == null || token == null)
       throw new Error("Thema oder Token ist null");
 
     await spec()
-      .get(`http://localhost:${PORT}/api/subject/list?id=${subject}`)
+      .get(`http://localhost:${PORT}/api/subject/list?id=${entry}`)
       .withHeaders({ authorization: token })
       .expectStatus(200)
       .expectHeaderContains("content-type", "application/json");
@@ -53,7 +69,7 @@ describe("Server | Subject", () => {
     await spec()
       .put(`http://localhost:${PORT}/api/subject/update`)
       .withHeaders({ authorization: token })
-      .withMultiPartFormData({ name: "Physik", id: subject })
+      .withMultiPartFormData({ name: "Physik", id: entry })
       .expectStatus(200)
       .expectBody("OK");
   });
@@ -62,7 +78,7 @@ describe("Server | Subject", () => {
     if (token == null) throw new Error("Token ist null");
 
     await spec()
-      .delete(`http://localhost:${PORT}/api/subject/delete?id=${subject}`)
+      .delete(`http://localhost:${PORT}/api/subject/delete?id=${entry}`)
       .withHeaders({ authorization: token })
       .expectStatus(200)
       .expectBody("OK");
