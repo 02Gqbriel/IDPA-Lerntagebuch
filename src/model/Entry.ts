@@ -9,9 +9,10 @@ import {Subject} from "./Subject";
 export class Entry {
     private entryID!: number;
     private title: string;
-    private date!: Date;
+    private date: string;
     private content: string;
-    private subject: Subject;    
+    //private subject: Subject;    
+    private subjectID: number;
     
     /**
      * constructor for an entry
@@ -21,11 +22,23 @@ export class Entry {
      * @param content 
      * @param subject 
      */
-    constructor(title: string, date: Date, content: string, subject: Subject) {
+    constructor(title: string, date: string, content: string, subjectID: number) {
       this.title = title;
       this.date = date;
       this.content = content;
-      this.subject = subject;
+      this.subjectID = subjectID;
+    }
+
+    /**
+     * makes object of any type into object of entry
+     * 
+     * @param obj 
+     * @returns entry object
+     */
+    static fromObject(obj: any) {
+        const entry = new Entry(obj.title, obj.date, obj.content, obj.subjectID);
+        entry.setEntryID(obj.entryID);
+        return entry;
     }
     
     /**
@@ -59,14 +72,14 @@ export class Entry {
     /**
      * @returns date
      */
-    public getDate(): Date {
+    public getDate(): string {
         return this.date;
     }
 
     /**
      * @param date to set the date
      */
-    public setDate(date: Date) {
+    public setDate(date: string) {
         this.date = date;
     }
 
@@ -85,17 +98,17 @@ export class Entry {
     }
 
     /**
-     * @returns subject
+     * @returns subjectID
      */
-    public getSubject(): Subject {
-        return this.subject;
+    public getSubjectID(): number {
+        return this.subjectID;
     }
 
     /**
-     * @param subject to set the subject
+     * @param subjectID to set the subjectID
      */
-    public setSubject(subject: Subject) {
-        this.subject = subject;
+    public setSubjectID(subjectID: number) {
+        this.subjectID = subjectID;
     }
   }
   

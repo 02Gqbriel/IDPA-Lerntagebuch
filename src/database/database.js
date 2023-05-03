@@ -27,6 +27,6 @@ db.run('CREATE TABLE IF NOT EXISTS Entry (' +
             'entryID INTEGER PRIMARY KEY AUTOINCREMENT,' +
             'subjectID INTEGER NOT NULL,' +
             'title varchar(255),' +
-            'date DATE,' +
+            'date varchar(20),' +
             'content TEXT,' +
             'FOREIGN KEY(subjectID) REFERENCES Subject(subjectID));');

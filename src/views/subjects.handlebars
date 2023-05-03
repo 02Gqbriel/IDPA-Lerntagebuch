@@ -1,0 +1,45 @@
+
+{{> header}}
+
+<div id="subjectNav">
+    <h3>Meine Fächer</h3>
+    <button class="button" href="#" onclick="show('popup')">+ Neues Fach</button>
+
+    <div class="popup" id="popup">
+        <h4>Neues Fach erstellen</h4>
+
+        <form id='newSubjectForm' action="" method="post">
+
+            <label for="subjectName">Fach benennen: </label>
+            <input type="text" id="subjectName" name="subjectName" required><br>
+
+            <button type="submit" id="submit">Fertig</button>
+            <button onclick="hide('popup')">Abbruch</button>
+
+        </form>
+        
+        <script src='/js/newSubject.js'></script>
+
+    </div>
+    <script>
+        $ = function(id) {
+            return document.getElementById(id);
+        }
+
+        var show = function(id) {
+            $(id).style.display ='block';
+        }
+        var hide = function(id) {
+            $(id).style.display ='none';
+        }
+    </script>
+    
+</div>
+
+
+<div id="cardContainer">
+
+</div>
+    
+
+

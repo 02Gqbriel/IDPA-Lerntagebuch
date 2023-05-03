@@ -22,7 +22,7 @@ export function insertEntry(entry: Entry): Promise<any> {
   const selectQuery = 'SELECT last_insert_rowid() as id';
 
   return new Promise((resolve, reject) => {
-    db.run(insert, [entry.getSubject().getSubjectID(), entry.getTitle(), entry.getDate(), entry.getContent()], (err: { message: any; }) => {
+    db.run(insert, [entry.getSubjectID(), entry.getTitle(), entry.getDate(), entry.getContent()], (err: { message: any; }) => {
       if (err) {
         reject(err.message);
       } else {
@@ -49,7 +49,7 @@ export function insertEntry(entry: Entry): Promise<any> {
  * @param content 
  * @returns Promise: with 'worked' or an error massage
  */
-export function updateEntry(entryID: number, subjectID: number, title: string, date: Date, content: string): Promise<String> {
+export function updateEntry(entryID: number, subjectID: number, title: string, date: string, content: string): Promise<String> {
   const update = 'UPDATE Entry SET subjectID=?, title=?, date=?, content=? WHERE entryID=?';
   
   return new Promise((resolve, reject) => {
@@ -70,11 +70,11 @@ export function updateEntry(entryID: number, subjectID: number, title: string, d
  * @param entryID to select entity 
  * @returns Promise: with the wanted entity or an error message 
  */
-export function selectEntity(entryID: number | undefined): Promise<any> {
+export function selectEntity(entryID: number | undefined): Promise<Entry> {
   const selectById = 'SELECT * FROM Entry WHERE entryID=?';
 
   return new Promise((resolve, reject) => {
-    db.get(selectById, [entryID], (err: { message: any; }, row: any) => {
+    db.get(selectById, [entryID], (err: { message: any; }, row: Entry) => {
       if (err) {
         reject(err.message);
       } else {
@@ -97,7 +97,7 @@ export function selectAll(): Promise<Entry[]> {
       if (err) {
         reject(err.message);
       } else {
-        resolve(rows);
+        resolve(rows.map(row => Entry.fromObject(row)));
       }
     });
   });

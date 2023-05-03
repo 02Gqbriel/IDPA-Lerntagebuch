@@ -16,6 +16,17 @@ export class Subject {
     constructor(name: string) {
       this.name = name;
     }
+
+    /**
+     * makes object of any type into object of subject
+     * 
+     * @param obj 
+     * @returns subject object
+     */
+    static fromObject(obj: any) {
+      const subject = new Subject(obj.name);
+      return subject;
+    }
     
     /**
      * @returns subjectID

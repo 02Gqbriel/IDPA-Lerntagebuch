@@ -20,6 +20,7 @@ describe('insertUser', () => {
   it('should insert a user into the database', async () => {
     const newUserID = await insertUser(user);
     expect(newUserID).to.be.a('number');
+    expect(newUserID).to.equal(user.getUserID());
   });
 });
 
@@ -60,22 +61,13 @@ describe('selectEntity', () => {
 describe('selectAll', () => {
   it('should return all users in database',async () => {
     const usersList = await selectAll();
-    expect(usersList[0].getUserID()).to.equal(user2.getUserID());
-    expect(usersList[0].getUsername()).to.equal(user2.getUsername());
-    expect(usersList[0].getPassword()).to.equal(user2.getPassword());
-    expect(usersList[0].getRole()).to.equal(user2.getRole());
+    const lastuser = usersList[usersList.length - 1];
+    expect(lastuser.getUserID()).to.equal(user2.getUserID());
+    expect(lastuser.getUsername()).to.equal(user2.getUsername());
+    expect(lastuser.getPassword()).to.equal(user2.getPassword());
+    expect(lastuser.getRole()).to.equal(user2.getRole());
   })
 });
-/**
- * return sollte so aussehen: [
-  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
-  User { username: 'log', password: 'lef', role: 'Schüler' }
-]
-[
-  User { username: 'amsfe', password: 'ajdfe', role: 'Lehrbetrieb' },
-  User { username: 'log', password: 'lef', role: 'Schüler' }
-]
- */
 
 /**
  * test of function deleteUser 
