@@ -25,6 +25,7 @@ export class Subject {
      */
     static fromObject(obj: any) {
       const subject = new Subject(obj.name);
+      subject.setSubjectID(obj.subjectID);
       return subject;
     }
     
