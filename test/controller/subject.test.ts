@@ -26,16 +26,15 @@ describe('Server | Subject', () => {
 		subject = res.json;
 	});
 
-	await spec()
-		.get(`http://localhost:${PORT}/api/subject/list`)
-		.withHeaders({ authorization: token })
-		.expectStatus(200)
-		.expectHeaderContains('content-type', 'application/json');
-});
+	it('Soll alle Fächer/Themen zurückbekommen', async () => {
+		if (token == null) throw new Error('Thema oder Token ist null');
 
-it('Soll ein Fächer/Themen zurückbekommen', async () => {
-	if (subject == null || token == null)
-		throw new Error('Thema oder Token ist null');
+		await spec()
+			.get(`http://localhost:${PORT}/api/subject/list`)
+			.withHeaders({ authorization: token })
+			.expectStatus(200)
+			.expectHeaderContains('content-type', 'application/json');
+	});
 
 	it('Soll ein Fach/Thema zurückbekommen', async () => {
 		if (subject == null || token == null)
