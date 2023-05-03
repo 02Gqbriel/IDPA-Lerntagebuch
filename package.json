@@ -48,6 +48,7 @@
     "@types/morgan": "^1.9.4",
     "@types/multer": "^1.4.7",
     "@types/node": "^18.15.3",
+    "@types/sqlite3": "^3.1.8",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "compression": "^1.7.4",

@@ -30,6 +30,7 @@ export class User {
      */
     static fromObject(obj: any) {
       const user = new User(obj.username, obj.password, obj.role);
+      user.setUserID(obj.userID);
       return user;
     }
     

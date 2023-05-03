@@ -1,52 +1,76 @@
-import { spec } from "pactum";
-import * as SubjectDao from "../../src/model/subjectDao";
-import { string, int } from "pactum-matchers";
-import { server } from "../../src/main";
-import { Subject } from "../../src/model/Subject";
-import { token } from "./auth.test";
+import { spec } from 'pactum';
+import { server } from '../../src/main';
+import { token } from './auth.test';
 
 const PORT = process.env.PORT ?? 3001;
 
-const username = "z-user-" + Date.now();
-const password = "geheim";
+let subject: number | null = null;
 
-let subject: Subject | null = null;
+describe('Server | Subject', () => {
+	before(async function () {
+		if (!server.listening) {
+			server.listen(PORT);
+		}
+	});
 
-describe("Server | Subject", () => {
-  before(async function () {
-    if (!server.listening) {
-      server.listen(PORT);
-    }
+	it('Soll ein Fach/Thema erstellen', async () => {
+		if (token == null) throw new Error('Token ist null');
 
-    subject = await SubjectDao.insertSubject(new Subject("Mathematik"));
+		const res = await spec()
+			.post(`http://localhost:${PORT}/api/subject/create`)
+			.withHeaders({ authorization: token })
+			.withMultiPartFormData({ name: 'Mathematik' })
+			.expectStatus(200)
+			.expectHeaderContains('content-type', 'application/json');
 
-    console.log(subject);
-  });
+		subject = res.json;
+	});
 
-  it("Soll alle Fächer/Themen zurückbekommen", async () => {
-    if (token == null) throw new Error("Token ist null");
+	it('Soll alle Fächer/Themen zurückbekommen', async () => {
+		if (token == null) throw new Error('Thema oder Token ist null');
 
-    await spec()
-      .get(`http://localhost:${PORT}/api/subject/list`)
-      .withHeaders({ authorization: token })
-      .expectStatus(200)
-      .expectHeaderContains("content-type", "application/json");
-  });
+		await spec()
+			.get(`http://localhost:${PORT}/api/subject/list`)
+			.withHeaders({ authorization: token })
+			.expectStatus(200)
+			.expectHeaderContains('content-type', 'application/json');
+	});
 
-  it("Soll ein Fächer/Themen zurückbekommen", async () => {
-    if (subject == null || token == null)
-      throw new Error("Thema oder Token ist null");
+	it('Soll ein Fach/Thema zurückbekommen', async () => {
+		if (subject == null || token == null)
+			throw new Error('Thema oder Token ist null');
 
-    await spec()
-      .get(`http://localhost:${PORT}/api/subject/list?id=${subject}`)
-      .withHeaders({ authorization: token })
-      .expectStatus(200)
-      .expectHeaderContains("content-type", "application/json");
-  });
+		await spec()
+			.get(`http://localhost:${PORT}/api/subject/list?id=${subject}`)
+			.withHeaders({ authorization: token })
+			.expectStatus(200)
+			.expectHeaderContains('content-type', 'application/json');
+	});
 
-  after(() => {
-    if (server.listening) {
-      server.close();
-    }
-  });
+	it('Soll ein Fach/Thema überarbeitet', async () => {
+		if (token == null) throw new Error('Token ist null');
+
+		await spec()
+			.put(`http://localhost:${PORT}/api/subject/update`)
+			.withHeaders({ authorization: token })
+			.withMultiPartFormData({ name: 'Physik', id: subject })
+			.expectStatus(200)
+			.expectBody('OK');
+	});
+
+	it('Soll ein Fach/Thema löschen', async () => {
+		if (token == null) throw new Error('Token ist null');
+
+		await spec()
+			.delete(`http://localhost:${PORT}/api/subject/delete?id=${subject}`)
+			.withHeaders({ authorization: token })
+			.expectStatus(200)
+			.expectBody('OK');
+	});
+
+	after(() => {
+		if (server.listening) {
+			server.close();
+		}
+	});
 });
