@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/">
+
 <script>
     (async () => {
         const token = sessionStorage.getItem('token');
@@ -10,25 +12,37 @@
             return window.location.assign("/login")
         }
 
-        const infoRes = await fetch('/api/auth/info', {
+        const formData = new FormData();
+
+        formData.append("name", "iefsioefj");
+
+        const infoRes = await fetch('/api/subject/create', {
             headers: { Authorization: token },
+            method: "post",
+            body: formData
         });
 
-        if (!infoRes.ok) {
+        if (!.infoResok) {
             return window.location.assign("/login")
         }
 
         const info = await infoRes.json();
 
-        const root = document.getElementById("root")
+        console.log(info)
+
+        const root = document.getElementById("root");
+        for () {
+            info[0].name
+        }
+
+        root.innerHTML += `<div class="container">${info.name}</div>`
 
         root.classList.replace("hidden", "flex")
     })()
-
 </script>
 
 <div id="root" class="hidden h-screen flex-col">
-    <div class="fixed top-0 right-0 z-50 p">
+    <div class="fixed top-0 right-0 z-50 ">
         header
     </div>
 
