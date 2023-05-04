@@ -10,3 +10,5 @@ tinymce.init({
 	resize: false,
 	height: '100%',
 });
+
+
