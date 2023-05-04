@@ -71,8 +71,8 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 	res.sendStatus(200);
 });
 
-router.delete('/delete', verifyToken, async (req, res) => {
-	const { id } = req.query as {
+router.delete('/delete', verifyToken, upload.none(), async (req, res) => {
+	const { id } = req.body as {
 		id: number | undefined;
 	};
 
