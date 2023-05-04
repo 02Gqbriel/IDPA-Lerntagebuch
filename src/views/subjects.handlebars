@@ -52,6 +52,28 @@
         var hide = function(id) {
             $(id).style.display ='none';
         }
+        var showDelete = function(deleteid, subjectID){
+            $(deleteid).style.display ='block';
+            document.getElementById('submitDelete').onclick = async (ev) => {
+                ev.preventDefault();
+
+                const token = sessionStorage.getItem('token');
+
+                const id = subjectID;
+                console.log(typeof id + id)
+
+                const formData = new FormData();
+                formData.append('id', id);
+
+                const resDelete = await fetch('/api/subject/delete', {
+                    headers: { Authorization: token },
+                    method: 'delete',
+                    body: formData
+                });
+
+                hide('popupDelete');
+            };
+        }
     </script>
 
     <div id="subjectContainer">
@@ -82,14 +104,24 @@
 
                 const subjectContainer = document.getElementById("subjectContainer");
                 for (let i = 0; i < list.length; i++){
-                    subjectContainer.innerHTML += `<div class="subjectItem"><a href="/entries">${list[i].name}</a></div>`
+                    subjectContainer.innerHTML += `<div class="subjectItem">
+                                                    <a href="/entries">${list[i].name}</a>
+                                                    <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="showDelete('popupDelete', ${list[i].subjectID})" data-id="${list[i].subjectID}">Löschen</button>
+                                                </div>`
                 }
                 subjectContainer.classList.replace("hidden", "flex")
-
+                
             })()
             
 
         </script>
+        <div class="popupDelete" id="popupDelete">
+            <h4>Willst du das Fach löschen?</h4>
+            <div class="newButtons">
+                <button type="submit" id="submitDelete" class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Bestätigen</button>
+                <button onclick="hide('popupDelete')">Abbruch</button>
+            </div>
+        </div>
     </div>
 
 </div>
