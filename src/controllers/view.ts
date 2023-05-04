@@ -28,8 +28,12 @@ router.get('/editor/:id', async (req, res) => {
 	res.render('edit');
 });
 
-router.get('/subjects/test', async (req, res) => {
+router.get('/subjects', async (req, res) => {
 	res.render('subjects');
+});
+
+router.get('/entries', async (req, res) => {
+	res.render('entries');
 });
 
 router.get('/*', (req, res) => {

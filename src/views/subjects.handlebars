@@ -1,9 +1,27 @@
+<head>
+    <link rel="stylesheet" href="/css/subjects.css">
+</head>
 
+<script>
+    (async () => {
+        const token = sessionStorage.getItem('token');
 
-<div id="subjectNav">
-    <h3>Meine Fächer</h3>
-    <button class="button" href="#" onclick="show('popup')">+ Neues Fach</button>
+        const res = await fetch('/api/auth/verify', {
+            headers: { Authorization: token },
+        });
 
+        if (!res.ok) {
+            return window.location.assign("/login")
+        }
+    })()
+</script>
+
+<div>
+    <div id="subjectHeader">
+        <h3 id="text">Meine Fächer</h3>
+        <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="show('popup')">+ Neues Fach</button>
+    </div>
+    
     <div class="popup" id="popup">
         <h4>Neues Fach erstellen</h4>
 
@@ -12,17 +30,20 @@
             <label for="subjectName">Fach benennen: </label>
             <input type="text" id="subjectName" name="subjectName" required><br>
 
-            <button type="submit" id="submit">Fertig</button>
-            <button onclick="hide('popup')">Abbruch</button>
+            <div id="newButtons">
+                <button type="submit" id="submit" class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Fertig</button>
+                <button onclick="hide('popup')">Abbruch</button>
+            </div>
+            
 
         </form>
         
         <script src='/js/newSubject.js'></script>
-
     </div>
+
     <script>
         $ = function(id) {
-            return document.getElementById(id);
+        return document.getElementById(id);
         }
 
         var show = function(id) {
@@ -32,11 +53,44 @@
             $(id).style.display ='none';
         }
     </script>
-    
-</div>
 
+    <div id="subjectContainer">
 
-<div id="cardContainer">
+        <script>
+            (async () => {
+                const token = sessionStorage.getItem('token');
+
+                const res = await fetch('/api/auth/verify', {
+                    headers: { Authorization: token },
+                });
+
+                if (!res.ok) {
+                    return window.location.assign("/login")
+                }
+
+                const resList = await fetch('/api/subject/list', {
+                    headers: { Authorization: token },
+                    method: "get"
+                });
+
+                if (!resList.ok){
+                    return window.location.assign("/login")
+                }
+                const list = await resList.json();
+
+                console.log(list);
+
+                const subjectContainer = document.getElementById("subjectContainer");
+                for (let i = 0; i < list.length; i++){
+                    subjectContainer.innerHTML += `<div class="subjectItem"><a href="/entries">${list[i].name}</a></div>`
+                }
+                subjectContainer.classList.replace("hidden", "flex")
+
+            })()
+            
+
+        </script>
+    </div>
 
 </div>
     

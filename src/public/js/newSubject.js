@@ -20,10 +20,11 @@ document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 	formData.append('name', name);
 	
 
-	const resCreate = await fetch(url, {
-		method: 'post',
-		body: formData,
+	const resCreate = await fetch('/api/subject/create', {
 		headers: { Authorization: token },
+		method: 'post',
+		body: formData
+		
 	});
 
 	if (resCreate.ok) {
