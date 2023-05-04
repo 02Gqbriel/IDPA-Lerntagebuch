@@ -1,16 +1,32 @@
 document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 	ev.preventDefault();
 
-	const subjectName = document.getElementById('subjectName').value;
+	const token = sessionStorage.getItem('token');
+
+	const res = await fetch('/api/auth/verify', {
+		headers: { Authorization: token },
+	});
+
+	if (!res.ok) {
+		return window.location.assign("/login")
+	}
+
+	const name = document.getElementById('subjectName').value;
 
 	const url = ev.target.action;
 
-	const res = await fetch(url, {
+	const formData = new FormData();
+
+	formData.append('name', name);
+	
+
+	const resCreate = await fetch(url, {
 		method: 'post',
-		body: subjectName,
+		body: formData,
+		headers: { Authorization: token },
 	});
 
-	if (res.ok) {
+	if (resCreate.ok) {
 		return window.location.replace('/subjects');
 	}
 
@@ -18,5 +34,5 @@ document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 
 	const errorContainer = document.getElementById('error-container');
 
-	errorContainer.innerText = await res.text();
+	errorContainer.innerText = await resCreate.text();
 };

@@ -1,5 +1,4 @@
 
-{{> header}}
 
 <div id="subjectNav">
     <h3>Meine Fächer</h3>
@@ -8,7 +7,7 @@
     <div class="popup" id="popup">
         <h4>Neues Fach erstellen</h4>
 
-        <form id='newSubjectForm' action="" method="post">
+        <form id='newSubjectForm' action="/api/subject/create" method="post">
 
             <label for="subjectName">Fach benennen: </label>
             <input type="text" id="subjectName" name="subjectName" required><br>

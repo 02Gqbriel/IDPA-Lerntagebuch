@@ -28,6 +28,11 @@ router.get('/editor/:id', async (req, res) => {
 	res.render('edit');
 });
 
+router.get('/subjects/test', async (req, res) => {
+	res.render('subjects');
+});
+
 router.get('/*', (req, res) => {
 	res.status(404).render('404');
 });
+
