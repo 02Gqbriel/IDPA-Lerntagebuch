@@ -11,7 +11,6 @@ export class Entry {
     private title: string;
     private date: string;
     private content: string;
-    //private subject: Subject;    
     private subjectID: number;
     
     /**

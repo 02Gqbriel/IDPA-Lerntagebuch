@@ -46,22 +46,19 @@ export function insertSubject(subject: Subject): Promise<any> {
  * @param name
  * @returns Promise: with 'worked' or an error massage
  */
-export function updateSubject(
-	subjectID: number,
-	name: string
-): Promise<String> {
-	const update = 'UPDATE Subject SET name=? WHERE subjectID=?';
-
-	return new Promise((resolve, reject) => {
-		db.run(update, [name, subjectID], (err: { message: any }) => {
-			if (err) {
-				console.error(`Error updating user: ${err.message}`);
-				reject(err.message);
-			} else {
-				resolve('worked');
-			}
-		});
-	});
+export function updateSubject(subjectID: number, name: string): Promise<String> {
+  const update = 'UPDATE Subject SET name=? WHERE subjectID=?';
+  
+  return new Promise((resolve, reject) => {
+    db.run(update, [name, subjectID], (err: { message: any; }) => {
+      if (err) {
+        console.error(`Error updating user: ${err.message}`);
+        reject(err.message);
+      } else {
+        resolve('worked');
+      }
+    });
+  });
 }
 
 /**

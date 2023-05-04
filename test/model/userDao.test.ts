@@ -33,7 +33,7 @@ describe('updateUser', () => {
   it('should update the wanted user with the correct data',async () => {
     const result = await updateUser(user.getUserID(), user2.getUsername(), user2.getPassword(), user2.getRole());
     expect(result).to.equal('worked');
-  })
+  });
 });
 
 /**
@@ -48,6 +48,11 @@ describe('selectEntity', () => {
       expect(row.password).to.equal(user.getPassword());
       expect(row.userID).to.equal(user.getUserID());
       expect(row.role).to.equal(user.getRole());
+    });
+  });
+  it('should return an error: invalid userID',async () => {
+    selectEntity(1000).then((row) => {
+      expect(row).to.equal("undefined");
     });
   });
 }); 

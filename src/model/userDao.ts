@@ -66,7 +66,6 @@ export function updateUser(
 			[username, password, role, userID],
 			(err: { message: any }) => {
 				if (err) {
-					console.error(`Error updating user: ${err.message}`);
 					reject(err.message);
 				} else {
 					resolve('worked');

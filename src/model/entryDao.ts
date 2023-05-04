@@ -55,7 +55,6 @@ export function updateEntry(entryID: number, subjectID: number, title: string, d
   return new Promise((resolve, reject) => {
     db.run(update, [subjectID, title, date, content, entryID], (err: { message: any; }) => {
       if (err) {
-        console.error(`Error updating user: ${err.message}`);
         reject(err.message);
       } else {
         resolve('worked');
