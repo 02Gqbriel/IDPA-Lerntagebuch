@@ -21,10 +21,6 @@ router.get('/editor/test', async (req, res) => {
 });
 
 router.get('/editor/:id', async (req, res) => {
-	const id = Number(req.params.id);
-
-	const user = await selectEntity(id);
-
 	res.render('edit');
 });
 
