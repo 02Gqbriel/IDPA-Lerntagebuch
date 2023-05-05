@@ -24,3 +24,59 @@
     margin-right: 20px;
     margin-bottom: 20px;
 }
+
+.popup {
+    display: none;
+    position: fixed;
+    padding: 20px;
+    width: 300px;
+    left: 50%;
+    margin-left: -150px;
+    height: auto;
+    top: 50%;
+    margin-top: -100px;
+    background: #FFF;
+    z-index: 20;
+    
+  }
+  
+  #popup:after {
+    position: fixed;
+    content: "";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -2;
+  }
+  
+  #popup:before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #FFF;
+    z-index: -1;
+  }
+
+  #title{
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 3px;
+    font-weight: 400;
+  }
+  
+#newEntryForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#submit{
+    margin-right: 10px;
+}

@@ -19,12 +19,63 @@
 <div>
     <div id="entriesHeader">
         <h3>Meine Einträge</h3>
-        <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onClick="location.href='/editor/test'">+ Neuer Eintrag</button>
+        <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" id="newEntryButton" onclick="show('popup')">+ Neuer Eintrag</button>
     </div>
 
-    <div id="nav">
+    <div class="popup" id="popup">
+        <h4>Neuen Eintrag erstellen</h4>
 
+        <form id='newEntryForm' action="/api/entry/create" method="post">
+
+            <label for="title">Eintrag benennen: </label>
+            <input type="text" id="title" name="title" required><br>
+
+            <div id="newButtons">
+                <button type="submit" id="submit" class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Fertig</button>
+                <button onclick="hide('popup')">Abbruch</button>
+            </div>
+            
+
+        </form>
+        
+        <script src='/js/newEntry.js'></script>
     </div>
+
+    <script>
+        $ = function(id) {
+        return document.getElementById(id);
+        }
+
+        var show = function(id) {
+            $(id).style.display ='block';
+        }
+        var hide = function(id) {
+            $(id).style.display ='none';
+        }
+        var showDelete = function(deleteid, subjectID){
+            $(deleteid).style.display ='block';
+            document.getElementById('submitDelete').onclick = async (ev) => {
+                ev.preventDefault();
+
+                const token = sessionStorage.getItem('token');
+
+                const id = subjectID;
+                console.log(typeof id + id)
+
+                const formData = new FormData();
+                formData.append('id', id);
+
+                const resDelete = await fetch('/api/subject/delete', {
+                    headers: { Authorization: token },
+                    method: 'delete',
+                    body: formData
+                });
+                
+                location.reload();
+                hide('popupDelete');
+            };
+        }
+    </script>
 
     <div id="entryContainer">
         <script>
