@@ -106,7 +106,7 @@
                 const subjectContainer = document.getElementById("subjectContainer");
                 for (let i = 0; i < list.length; i++){
                     subjectContainer.innerHTML += `<div class="subjectItem">
-                                                    <a href="/entries">${list[i].name}</a>
+                                                    <a href="/entries?id=${list[i].subjectID}">${list[i].name}</a>
                                                     <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="showDelete('popupDelete', ${list[i].subjectID})" data-id="${list[i].subjectID}">Löschen</button>
                                                 </div>`
                 }

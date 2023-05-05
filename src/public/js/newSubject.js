@@ -24,7 +24,6 @@ document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 		headers: { Authorization: token },
 		method: 'post',
 		body: formData
-		
 	});
 
 	if (resCreate.ok) {

@@ -3,8 +3,6 @@
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-
-
 }
 
 #subjectContainer{
@@ -53,7 +51,6 @@
   margin-top: -100px;
   background: #FFF;
   z-index: 20;
-  
 }
 
 #popupDelete:after {
@@ -133,4 +130,45 @@
 
 #submit{
     margin-right: 10px;
+}
+
+#entriesHeader {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+#entryContainer{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  
+}
+
+.entryItem{
+  background-color: rgb(201, 201, 201);
+  width: 220px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 3px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.entryItem a {
+  position: absolute;
+}
+
+.entryItem:hover button {
+  display: block;
+}
+
+.entryItem button {
+  display: none;
+  position: relative;
+  top: 25%;
 }
