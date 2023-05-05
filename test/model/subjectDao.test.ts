@@ -7,9 +7,15 @@
 import { expect } from 'chai';
 import { insertSubject, selectAll, selectEntity, updateSubject, deleteSubject } from '../../src/model/subjectDao';
 import { Subject } from '../../src/model/Subject';
+import { insertUser } from '../../src/model/userDao';
+import { User } from '../../src/model/User';
 
-const subject = new Subject("Mathe");
-const subject2 = new Subject("Franz");
+const user = new User("ammanna", "password", "Schüler");
+async () => {
+  await insertUser(user);
+}
+const subject = new Subject("Mathe", user.getUserID());
+const subject2 = new Subject("Franz", user.getUserID());
 
 /**
  * test of function insertSubject 
@@ -31,7 +37,7 @@ describe('insertSubject', () => {
  */
 describe('updateSubject', () => {
   it('should update the wanted subject with the correct data',async () => {
-    const result = await updateSubject(subject.getSubjectID(), subject2.getName());
+    const result = await updateSubject(subject.getSubjectID(), subject2.getName(), user.getUserID());
     expect(result).to.equal('worked');
   })
 });

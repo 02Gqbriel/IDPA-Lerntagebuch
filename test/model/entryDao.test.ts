@@ -6,13 +6,19 @@
 
 import { expect } from 'chai';
 import { insertEntry, selectAll, selectEntity, updateEntry, deleteEntry } from '../../src/model/entryDao';
+import { insertUser } from '../../src/model/userDao';
 import { insertSubject } from '../../src/model/subjectDao';
 import { Entry } from '../../src/model/Entry';
 import { Subject } from '../../src/model/Subject';
+import { User } from '../../src/model/User';
 
-const subject = new Subject("Mathe");
-const entry = new Entry("Kurs1", "2022-05-22", "Das ist der Erste Kurs", subject.getSubjectID());
-const entry2 = new Entry("Kurs2", "2023-06-11", "Das ist der zweite Kurs", subject.getSubjectID());
+const user = new User("ammanna", "password", "Schüler");
+async () => {
+  await insertUser(user);
+}
+const subject = new Subject("Mathe", user.getUserID());
+const entry = new Entry("Kurs1", "2022-05-22", "Das ist der Erste Kurs", subject.getSubjectID(), user.getUserID());
+const entry2 = new Entry("Kurs2", "2023-06-11", "Das ist der zweite Kurs", subject.getSubjectID(), user.getUserID());
 
 /**
  * test of function insertEntry 
@@ -37,7 +43,7 @@ describe('insertEntry', () => {
  */
 describe('updateEntry', () => {
   it('should update the wanted entry with the correct data',async () => {
-    const result = await updateEntry(entry.getEntryID(), entry2.getSubjectID(), entry2.getTitle(), entry2.getDate(), entry2.getContent());
+    const result = await updateEntry(entry.getEntryID(), entry2.getSubjectID(), entry2.getTitle(), entry2.getDate(), entry2.getContent(), entry2.getUserID());
     expect(result).to.equal('worked');
   })
 });

@@ -12,6 +12,7 @@ export class Entry {
     private date: string;
     private content: string;
     private subjectID: number;
+    private userID: number;
     
     /**
      * constructor for an entry
@@ -21,11 +22,12 @@ export class Entry {
      * @param content 
      * @param subject 
      */
-    constructor(title: string, date: string, content: string, subjectID: number) {
+    constructor(title: string, date: string, content: string, subjectID: number, userID: number) {
       this.title = title;
       this.date = date;
       this.content = content;
       this.subjectID = subjectID;
+      this.userID = userID;
     }
 
     /**
@@ -35,7 +37,7 @@ export class Entry {
      * @returns entry object
      */
     static fromObject(obj: any) {
-        const entry = new Entry(obj.title, obj.date, obj.content, obj.subjectID);
+        const entry = new Entry(obj.title, obj.date, obj.content, obj.subjectID, obj.userID);
         entry.setEntryID(obj.entryID);
         return entry;
     }
@@ -108,6 +110,20 @@ export class Entry {
      */
     public setSubjectID(subjectID: number) {
         this.subjectID = subjectID;
+    }
+
+    /**
+     * @returns userID
+     */
+    public getUserID(): number {
+        return this.userID;
+    }
+
+    /**
+     * @param userID to set the userID
+     */
+    public setUserID(userID: number) {
+        this.userID = userID;
     }
   }
   

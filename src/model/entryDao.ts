@@ -18,11 +18,11 @@ const db = new sqlite3.Database(dbPath);
  * @returns Promise: with the id of the inserted entry or an error message
  */
 export function insertEntry(entry: Entry): Promise<any> {
-  const insert = 'INSERT INTO Entry (subjectID, title, date, content) VALUES (?,?,?,?)';
+  const insert = 'INSERT INTO Entry (subjectID, title, date, content, userID) VALUES (?,?,?,?,?)';
   const selectQuery = 'SELECT last_insert_rowid() as id';
 
   return new Promise((resolve, reject) => {
-    db.run(insert, [entry.getSubjectID(), entry.getTitle(), entry.getDate(), entry.getContent()], (err: { message: any; }) => {
+    db.run(insert, [entry.getSubjectID(), entry.getTitle(), entry.getDate(), entry.getContent(), entry.getUserID()], (err: { message: any; }) => {
       if (err) {
         reject(err.message);
       } else {
@@ -49,11 +49,11 @@ export function insertEntry(entry: Entry): Promise<any> {
  * @param content 
  * @returns Promise: with 'worked' or an error massage
  */
-export function updateEntry(entryID: number, subjectID: number, title: string, date: string, content: string): Promise<String> {
-  const update = 'UPDATE Entry SET subjectID=?, title=?, date=?, content=? WHERE entryID=?';
+export function updateEntry(entryID: number, subjectID: number, title: string, date: string, content: string, userID: number): Promise<String> {
+  const update = 'UPDATE Entry SET subjectID=?, title=?, date=?, content=?, userID=? WHERE entryID=?';
   
   return new Promise((resolve, reject) => {
-    db.run(update, [subjectID, title, date, content, entryID], (err: { message: any; }) => {
+    db.run(update, [subjectID, title, date, content, entryID, userID], (err: { message: any; }) => {
       if (err) {
         reject(err.message);
       } else {

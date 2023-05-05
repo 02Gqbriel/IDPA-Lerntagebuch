@@ -7,14 +7,16 @@
 export class Subject {
     private subjectID!: number;
     private name: string;
+    private userID: number;
 
     /**
      * constructor for a subject
      * 
      * @param name 
      */
-    constructor(name: string) {
+    constructor(name: string, userID: number) {
       this.name = name;
+      this.userID = userID;
     }
 
     /**
@@ -24,7 +26,7 @@ export class Subject {
      * @returns subject object
      */
     static fromObject(obj: any) {
-      const subject = new Subject(obj.name);
+      const subject = new Subject(obj.name, obj.userID);
       subject.setSubjectID(obj.subjectID);
       return subject;
     }
@@ -55,6 +57,20 @@ export class Subject {
      */
     public setName(name: string) {
       this.name = name;
+    }
+
+    /**
+     * @returns userID
+     */
+    public getUserID(): number {
+      return this.userID;
+    }
+
+    /**
+     * @param userID to set the userID
+     */
+    public setUserID(userID: number) {
+        this.userID = userID;
     }
   }
   
