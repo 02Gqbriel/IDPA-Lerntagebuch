@@ -68,36 +68,6 @@ router.post('/create', verifyToken, upload.none(), async (req, res) => {
 	res.json({ entryID: result });
 });
 
-router.put('/update', upload.none(), async (req, res) => {
-	const { title, date, subjectID, id } = req.body as {
-		id: number | undefined;
-		title: string | undefined;
-		date: Date | undefined;
-		subjectID: number | undefined;
-	};
-
-	if (
-		title === undefined ||
-		date === undefined ||
-		subjectID === undefined ||
-		id === undefined
-	) {
-		return res.status(400).send('Invalid Body');
-	}
-
-	const subjectObject = <Subject>await SubjectDao.selectEntity(subjectID);
-
-	const result = await EntryDao.insertEntry(
-		new Entry(title, dateToDateString(date), '', subjectObject.getSubjectID())
-	);
-
-	if (typeof result == 'string') {
-		return res.sendStatus(409);
-	}
-
-	res.sendStatus(200);
-});
-
 router.put('/update', verifyToken, upload.none(), async (req, res) => {
 	const { title, id, date, subjectID, content } = req.body as {
 		id: number | undefined;
