@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 document.getElementById('newEntryForm').onsubmit = async (ev) => {
+=======
+ocument.getElementById('newEntryForm').onsubmit = async (ev) => {
+>>>>>>> 419b98f8a307155f70394b4c8d684a01570f268b
 	ev.preventDefault();
 
 	const token = sessionStorage.getItem('token');
