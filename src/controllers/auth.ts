@@ -15,23 +15,25 @@ router.post('/login', upload.none(), async (req, res) => {
 	};
 
 	if (username == null || password == null) {
-		return res.status(400).send('Invalid Body');
+		return res.status(400).send('Parameter sind fehlerhaft!');
 	}
 
 	const users = await UserDao.selectAll();
 
 	if (!users.some(v => v.getUsername() === username)) {
-		return res.status(404).send('User not found');
+		return res.status(404).send('Benutzer existiert nicht!');
 	}
 
 	const user = users.find(v => v.getUsername() === username);
 
 	if (user == undefined) {
-		return res.status(409).send('User not found');
+		return res.status(409).send('Benutzer existiert nicht');
 	}
 
 	if (!comparePasswords(password, user.getPassword())) {
-		return res.status(400).send("Password doesn't match username");
+		return res
+			.status(400)
+			.send('Passwort stimmt nicht mit dem des Benutzers überein!');
 	}
 
 	const token = createToken(username);
@@ -47,13 +49,13 @@ router.post('/register', upload.none(), async (req, res) => {
 	};
 
 	if (username == null || password == null || role == null) {
-		return res.status(400).send('Invalid Body');
+		return res.status(400).send('Parameter sind fehlerhaft!');
 	}
 
 	const users = await UserDao.selectAll();
 
 	if (users.some(v => v.getUsername() === username)) {
-		return res.status(404).send('Username is already taken');
+		return res.status(404).send('Benutzername ist bereits vergeben!');
 	}
 
 	await UserDao.insertUser(new User(username, hashPassword(password), role));
@@ -67,7 +69,7 @@ router.get('/refresh', verifyToken, async (req, res) => {
 	const username = reverseToken(token);
 
 	if (username === null) {
-		return res.status(400).send('something went wrong');
+		return res.status(400).send('Ups etwas ist schief gelaufen!');
 	}
 
 	res.json(createToken(username));
@@ -91,5 +93,5 @@ router.get('/info', verifyToken, async (req, res) => {
 		}
 	}
 
-	res.status(404).send('not found');
+	res.status(404).send('Benutzer nicht gefunden!');
 });
