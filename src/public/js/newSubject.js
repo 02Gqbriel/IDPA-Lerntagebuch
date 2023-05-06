@@ -11,6 +11,11 @@ document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 		return window.location.assign("/login")
 	}
 
+	const resUserInfoSubject = await fetch('api/auth/info', {
+		headers: { Authorization: token },
+	});
+	const userInfoSubject = await resUserInfoSubject.json();
+
 	const name = document.getElementById('subjectName').value;
 
 	const url = ev.target.action;
@@ -18,6 +23,7 @@ document.getElementById('newSubjectForm').onsubmit = async (ev) => {
 	const formData = new FormData();
 
 	formData.append('name', name);
+	formData.append('userID', userInfoSubject.userID);
 	
 
 	const resCreate = await fetch('/api/subject/create', {

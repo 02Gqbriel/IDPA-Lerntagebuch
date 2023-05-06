@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 document.getElementById('newEntryForm').onsubmit = async (ev) => {
-=======
-ocument.getElementById('newEntryForm').onsubmit = async (ev) => {
->>>>>>> 419b98f8a307155f70394b4c8d684a01570f268b
 	ev.preventDefault();
 
 	const token = sessionStorage.getItem('token');
@@ -14,6 +10,11 @@ ocument.getElementById('newEntryForm').onsubmit = async (ev) => {
 	if (!res.ok) {
 		return window.location.assign("/login")
 	}
+
+	const resUserInfo = await fetch('api/auth/info', {
+		headers: { Authorization: token },
+	});
+	const userInfo = await resUserInfo.json();
 
 	const title = document.getElementById('entryTitle').value;
 
@@ -30,7 +31,8 @@ ocument.getElementById('newEntryForm').onsubmit = async (ev) => {
     var currentUrl = window.location.search;
     const urlParams = new URLSearchParams(currentUrl);
     formData.append('subject', parseInt(urlParams.get('id'))); 
-	
+
+	formData.append('userID', userInfo.userID);	
 
 	const resCreateEntry = await fetch('/api/entry/create', {
 		headers: { Authorization: token },
