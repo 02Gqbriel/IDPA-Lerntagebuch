@@ -27,10 +27,10 @@
 
             const formData = new FormData();
 
-            formData.append("date", date)
-            formData.append("id", entryID)
-            formData.append("subjectID", subjectID)
-            formData.append("userID", userID)
+
+            formData.append("id", Number(entryID))
+            formData.append("subjectID", Number(subjectID))
+            formData.append("userID", Number(userID))
             formData.append("title", title)
             formData.append("date", date)
             formData.append("content", tinymce.activeEditor.getContent());

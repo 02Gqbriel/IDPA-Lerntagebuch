@@ -15,23 +15,11 @@ tinymce.init({
 		editor.on('init', async function (e) {
 			const token = sessionStorage.getItem('token');
 
-			const res = await fetch('/api/auth/verify', {
-				headers: { Authorization: token },
-			});
-
-			if (!res.ok) {
-				return window.location.assign('/login');
-			}
-
 			const [id] = window.location.pathname.split('/').reverse();
 
 			const resEntry = await fetch('/api/entry/get?id=' + id, {
 				headers: { Authorization: token },
 			});
-
-			if (!res.ok) {
-				return window.location.assign('/login');
-			}
 
 			const { title, content } = await resEntry.json();
 

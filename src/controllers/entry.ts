@@ -34,6 +34,8 @@ router.get('/get', verifyToken, async (req, res) => {
 		return res.sendStatus(409);
 	}
 
+	console.log(result);
+
 	res.json(result);
 });
 
@@ -79,7 +81,7 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 	const { title, id, date, subjectID, content, userID } = req.body as {
 		id: number | undefined;
 		title: string | undefined;
-		date: number | undefined;
+		date: string | undefined;
 		subjectID: number | undefined;
 		content: string | undefined;
 		userID: number | undefined;
@@ -97,19 +99,30 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 	}
 
 	const result = await EntryDao.updateEntry(
+		Number(id),
+		Number(subjectID),
+		title,
+		date,
+		content,
+		Number(userID)
+	);
+
+	console.log(result, {
 		id,
 		subjectID,
 		title,
-		dateToDateString(new Date(date)),
+		date,
 		content,
-		userID
-	);
-
-	console.log(result);
+		userID,
+	});
 
 	if (result !== 'worked') {
 		return res.sendStatus(409);
 	}
+
+	const r = await EntryDao.selectEntity(Number(id));
+
+	console.log(r);
 
 	res.sendStatus(200);
 });
