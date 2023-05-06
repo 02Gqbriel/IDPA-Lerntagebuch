@@ -35,7 +35,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.6",
-    "tinymce": "^6.4.0"
+    "tinymce": "^6.4.0",
+    "tinymce-i18n": "^23.5.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
