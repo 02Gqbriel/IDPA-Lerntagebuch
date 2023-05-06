@@ -1,16 +1,44 @@
 <script>
-    (async () => {
-        const token = sessionStorage.getItem('token');
+    window.onload = () => {
+        const form = document.getElementById("form")
 
-        const res = await fetch('/api/auth/verify', {
-            headers: { Authorization: token },
-        });
+        form.onsubmit = async (ev) => {
+            ev.preventDefault()
 
-        if (!res.ok) {
-            return window.location.assign("/login")
+            const token = sessionStorage.getItem('token');
+
+            const res = await fetch('/api/auth/verify', {
+                headers: { Authorization: token },
+            });
+
+            if (!res.ok) {
+                return window.location.assign("/login")
+            }
+
+            const [id] = window.location.pathname.split("/").reverse()
+
+            const resEntry = await fetch("/api/entry/get?id=" + id, { headers: { Authorization: token } });
+
+            if (!resEntry.ok) {
+                return window.location.assign("/login")
+            }
+
+            const { date, entryID, subjectID, title, userID } = await resEntry.json()
+
+            const formData = new FormData();
+
+            formData.append("date", date)
+            formData.append("id", entryID)
+            formData.append("subjectID", subjectID)
+            formData.append("userID", userID)
+            formData.append("title", "update" + Date.now())
+            formData.append("date", date)
+            formData.append("content", tinymce.activeEditor.getContent());
+
+            const resSave = await fetch("/api/entry/update", { method: "put", headers: { Authorization: token }, body: formData })
         }
-
-    })()
+    }
 </script>
+
 
 {{> editor }}

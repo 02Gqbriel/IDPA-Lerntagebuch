@@ -21,8 +21,8 @@ router.get('/list', verifyToken, async (req, res) => {
 	res.json(result);
 });
 
-router.get('/get', verifyToken, upload.none(), async (req, res) => {
-	const { id } = req.body;
+router.get('/get', verifyToken, async (req, res) => {
+	const { id } = req.query;
 
 	if (id == undefined) {
 		return res.status(400).send('Invalid Body');
@@ -104,6 +104,8 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 		content,
 		userID
 	);
+
+	console.log(result);
 
 	if (result !== 'worked') {
 		return res.sendStatus(409);

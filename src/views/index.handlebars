@@ -31,20 +31,6 @@
 			</div>
 		</a>
 
-		<script>
-			const a = document.getElementById("edit");
-			const token = sessionStorage.getItem("token");
-
-			(async () => {
-				const res = await fetch("/api/auth/info", { headers: { "authorization": token } });
-
-				if (res.ok) {
-					const json = await res.json();
-
-					a.href = "/editor/" + json.userID;
-				}
-			})()
-		</script>
 
 		<a href='#' class='group grow relative block bg-black w-full xl:w-[40rem] overflow-hidden rounded'>
 			<img alt='Developer' src='/assets/review.jpg'

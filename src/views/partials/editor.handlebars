@@ -1,7 +1,18 @@
-<form action="/test" method="post" target="_blank" style='flex-grow: 1'>
-	<textarea id='tinymce'>
-		<h1 style='text-decoration: underline;'>Test</h1>
-	</textarea>
+<form id="form" action="/test" method="post" style='flex-grow: 1'>
+	<div class="w-full flex justify-between items-center">
+		<h1 class="text-4xl underline py-3" id="title">
+
+		</h1>
+
+
+		<button id="save" type="submit" class="py-2 px-8 rounded border-none bg-neutral-900 text-xs text-white">
+			Speichern
+		</button>
+	</div>
+
+	<div id='tinymce'>
+
+	</div>
 </form>
 
 <script type='application/javascript' src='/tinymce/tinymce.min.js'></script>
