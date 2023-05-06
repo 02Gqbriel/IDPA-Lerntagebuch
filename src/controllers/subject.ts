@@ -35,15 +35,16 @@ router.get('/get', verifyToken, async (req, res) => {
 });
 
 router.post('/create', verifyToken, upload.none(), async (req, res) => {
-	const { name } = req.body as {
+	const { name, userID } = req.body as {
 		name: string | undefined;
+		userID: number | undefined;
 	};
 
-	if (name == undefined) {
+	if (name == undefined || userID == undefined) {
 		return res.status(400).send('Invalid Body');
 	}
 
-	const result = await SubjectDao.insertSubject(new Subject(name));
+	const result = await SubjectDao.insertSubject(new Subject(name, userID));
 
 	if (typeof result == 'string') {
 		return res.sendStatus(409);
@@ -53,16 +54,17 @@ router.post('/create', verifyToken, upload.none(), async (req, res) => {
 });
 
 router.put('/update', verifyToken, upload.none(), async (req, res) => {
-	const { name, id } = req.body as {
+	const { name, id, userID } = req.body as {
 		id: number | undefined;
 		name: string | undefined;
+		userID: number | undefined;
 	};
 
-	if (name === undefined || id === undefined) {
+	if (name === undefined || id === undefined || userID == undefined) {
 		return res.status(400).send('Invalid Body');
 	}
 
-	const result = await SubjectDao.updateSubject(id, name);
+	const result = await SubjectDao.updateSubject(id, name, userID);
 
 	if (result !== 'worked') {
 		return res.sendStatus(409);

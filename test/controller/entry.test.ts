@@ -1,11 +1,12 @@
 import { spec, request, response } from 'pactum';
 import { server } from '../../src/main';
-import { token } from './auth.test';
+import { token, userID } from './auth.test';
 import { Subject } from '../../src/model/Subject';
 
 const PORT = process.env.PORT ?? 3001;
 
 let entry: number | null = null;
+let subjectID: number | null = null;
 
 describe('Server | Entry', () => {
 	before(async function () {
@@ -14,6 +15,9 @@ describe('Server | Entry', () => {
 		}
 
 		if (token === null) throw new Error('Token ist null');
+
+		request.setDefaultTimeout(5000);
+		response.setDefaultExpectResponseTime(5000);
 	});
 
 	it('Soll ein Eintrag erstellen', async () => {
@@ -26,9 +30,9 @@ describe('Server | Entry', () => {
 			.expectHeaderContains('content-type', 'application/json')
 			.returns(ctx => <{ name: string; subjectID: number }[]>ctx.res.json);
 
-		const subject = subjectList[0];
+		subjectID = <number>subjectList[0].subjectID;
 
-		if (subject === undefined) throw new Error('Subject ist null');
+		if (subjectID === undefined) throw new Error('SubjectID ist null');
 
 		entry = await spec()
 			.post(`http://localhost:${PORT}/api/entry/create`)
@@ -36,7 +40,8 @@ describe('Server | Entry', () => {
 			.withMultiPartFormData({
 				title: 'TestEntry',
 				date: Date.now(),
-				subject: subject.subjectID,
+				subject: subjectID,
+				userID,
 			})
 			.expectStatus(200)
 			.expectHeaderContains('content-type', 'application/json')
@@ -47,7 +52,7 @@ describe('Server | Entry', () => {
 		if (token == null) throw new Error('Token ist null');
 
 		await spec()
-			.get(`http://localhost:${PORT}/api/subject/list`)
+			.get(`http://localhost:${PORT}/api/entry/list`)
 			.withHeaders({ authorization: token })
 			.expectStatus(200)
 			.expectHeaderContains('content-type', 'application/json');
@@ -58,7 +63,8 @@ describe('Server | Entry', () => {
 			throw new Error('Thema oder Token ist null');
 
 		await spec()
-			.get(`http://localhost:${PORT}/api/subject/list?id=${entry}`)
+			.get(`http://localhost:${PORT}/api/entry/get`)
+			.withMultiPartFormData({ id: entry })
 			.withHeaders({ authorization: token })
 			.expectStatus(200)
 			.expectHeaderContains('content-type', 'application/json');
@@ -68,18 +74,29 @@ describe('Server | Entry', () => {
 		if (token == null || entry == null) throw new Error('Token ist null');
 
 		await spec()
-			.put(`http://localhost:${PORT}/api/subject/update`)
+			.put(`http://localhost:${PORT}/api/entry/update`)
 			.withHeaders({ authorization: token })
-			.withMultiPartFormData({ name: 'Physik', id: entry })
+			.withMultiPartFormData({
+				id: entry,
+				title: 'TestEntryÜberarbeitet',
+				date: Date.now(),
+				subjectID,
+				content: 'test',
+				userID,
+			})
 			.expectStatus(200)
-			.expectBody('OK');
+			.expectBody('OK')
+			.end();
 	});
 
 	it('Soll ein Fach/Thema löschen', async () => {
 		if (token == null) throw new Error('Token ist null');
 
 		await spec()
-			.delete(`http://localhost:${PORT}/api/subject/delete?id=${entry}`)
+			.delete(`http://localhost:${PORT}/api/entry/delete`)
+			.withMultiPartFormData({
+				id: entry,
+			})
 			.withHeaders({ authorization: token })
 			.expectStatus(200)
 			.expectBody('OK');

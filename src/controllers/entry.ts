@@ -21,8 +21,8 @@ router.get('/list', verifyToken, async (req, res) => {
 	res.json(result);
 });
 
-router.get('/get', verifyToken, async (req, res) => {
-	const { id } = req.query;
+router.get('/get', verifyToken, upload.none(), async (req, res) => {
+	const { id } = req.body;
 
 	if (id == undefined) {
 		return res.status(400).send('Invalid Body');
@@ -38,13 +38,19 @@ router.get('/get', verifyToken, async (req, res) => {
 });
 
 router.post('/create', verifyToken, upload.none(), async (req, res) => {
-	const { title, date, subject } = req.body as {
+	const { title, date, subject, userID } = req.body as {
 		title: string | undefined;
 		date: number | undefined;
 		subject: number | undefined;
+		userID: number | undefined;
 	};
 
-	if (title == undefined || date == undefined || subject == undefined) {
+	if (
+		title == undefined ||
+		date == undefined ||
+		subject == undefined ||
+		userID == undefined
+	) {
 		return res.status(400).send('Invalid Body');
 	}
 
@@ -57,7 +63,8 @@ router.post('/create', verifyToken, upload.none(), async (req, res) => {
 			title,
 			dateToDateString(new Date(date)),
 			'',
-			subjectObject.subjectID
+			subjectObject.subjectID,
+			userID
 		)
 	);
 
@@ -69,12 +76,13 @@ router.post('/create', verifyToken, upload.none(), async (req, res) => {
 });
 
 router.put('/update', verifyToken, upload.none(), async (req, res) => {
-	const { title, id, date, subjectID, content } = req.body as {
+	const { title, id, date, subjectID, content, userID } = req.body as {
 		id: number | undefined;
 		title: string | undefined;
-		date: Date | undefined;
+		date: number | undefined;
 		subjectID: number | undefined;
 		content: string | undefined;
+		userID: number | undefined;
 	};
 
 	if (
@@ -82,7 +90,8 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 		id === undefined ||
 		date === undefined ||
 		subjectID === undefined ||
-		content === undefined
+		content === undefined ||
+		userID == undefined
 	) {
 		return res.status(400).send('Invalid Body');
 	}
@@ -91,8 +100,9 @@ router.put('/update', verifyToken, upload.none(), async (req, res) => {
 		id,
 		subjectID,
 		title,
-		dateToDateString(date),
-		content
+		dateToDateString(new Date(date)),
+		content,
+		userID
 	);
 
 	if (result !== 'worked') {

@@ -1,6 +1,6 @@
 import { spec } from 'pactum';
 import { server } from '../../src/main';
-import { token } from './auth.test';
+import { token, userID } from './auth.test';
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -19,7 +19,7 @@ describe('Server | Subject', () => {
 		const res = await spec()
 			.post(`http://localhost:${PORT}/api/subject/create`)
 			.withHeaders({ authorization: token })
-			.withMultiPartFormData({ name: 'Mathematik' })
+			.withMultiPartFormData({ name: 'Mathematik', userID })
 			.expectStatus(200)
 			.expectHeaderContains('content-type', 'application/json');
 
@@ -53,7 +53,7 @@ describe('Server | Subject', () => {
 		await spec()
 			.put(`http://localhost:${PORT}/api/subject/update`)
 			.withHeaders({ authorization: token })
-			.withMultiPartFormData({ name: 'Physik', id: subject })
+			.withMultiPartFormData({ name: 'Physik', id: subject, userID })
 			.expectStatus(200)
 			.expectBody('OK');
 	});
@@ -62,7 +62,8 @@ describe('Server | Subject', () => {
 		if (token == null) throw new Error('Token ist null');
 
 		await spec()
-			.delete(`http://localhost:${PORT}/api/subject/delete?id=${subject}`)
+			.delete(`http://localhost:${PORT}/api/subject/delete`)
+			.withMultiPartFormData({ id: subject })
 			.withHeaders({ authorization: token })
 			.expectStatus(200)
 			.expectBody('OK');

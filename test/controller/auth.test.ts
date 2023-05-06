@@ -8,6 +8,7 @@ const username = 'z-user-' + Date.now();
 const password = 'geheim';
 
 export let token: string | null = null;
+export let userID: number | null = null;
 
 describe('Server | Auth', () => {
 	before(function () {
@@ -40,6 +41,19 @@ describe('Server | Auth', () => {
 			.expectJsonMatch({ token: string(), expires: int() });
 
 		token = res.json.token;
+	});
+
+	it('Soll die Userinformation zurückbekommen', async () => {
+		if (token == null) throw new Error('Token ist null');
+
+		const res = await spec()
+			.get(`http://localhost:${PORT}/api/auth/info`)
+			.withHeaders({ authorization: token })
+			.expectStatus(200)
+			.expectHeaderContains('content-type', 'application/json')
+			.expectJsonMatch({ username: string(), userID: int() });
+
+		userID = res.json.userID;
 	});
 
 	after(() => {
