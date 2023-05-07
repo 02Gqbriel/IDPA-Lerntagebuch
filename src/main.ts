@@ -6,6 +6,7 @@ import logger from 'morgan';
 import compression from 'compression';
 import { create } from 'express-handlebars';
 import { createWriteStream } from 'fs';
+import { spawnSync } from 'child_process';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -69,6 +70,9 @@ app.use(express.static(PUBLIC_FOLDER));
 
 app.use(view);
 
-export const server = app.listen(PORT, () => {
+export const server = app.listen(PORT, async () => {
 	console.log('> Server running on http://127.0.0.1:3000/');
+
+	process.env.MODE === 'production' &&
+		spawnSync('explorer', ['http://127.0.0.1:3000/']);
 });
