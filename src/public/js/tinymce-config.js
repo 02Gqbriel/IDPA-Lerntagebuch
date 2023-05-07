@@ -27,6 +27,8 @@ tinymce.init({
 
 			const { title, content } = await resEntry.json();
 
+			console.log(title);
+
 			const titleElement = document.getElementById('title');
 
 			titleElement.innerText = title;

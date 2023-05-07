@@ -11,15 +11,31 @@
 
 		</div>
 
-		<button id="back" type="button"
-			class="py-2 px-8 mr-2 rounded border-none bg-neutral-900 text-xs text-white disabled:cursor-not-allowed">
-			Zurück
-		</button>
 
-		<button id="save" type="submit"
-			class="py-2 px-8 rounded border-none bg-neutral-900 text-xs text-white disabled:cursor-not-allowed">
-			Speichern
-		</button>
+		<script>
+			(async () => {
+				const token = sessionStorage.getItem('token');
+				const entriesList = await fetch('/api/entry/list', {
+					headers: { Authorization: token },
+					method: "get"
+				});
+				const entryList = await entriesList.json();
+				for (let i = 0; i < entryList.length; i++) {
+					if (window.location.href.slice(-1) == entryList[i].entryID) {
+						document.getElementById("back").onclick = function back() {
+							window.location.href = `/entries?id=${entryList[i].subjectID}`;
+						}
+					}
+				}
+			})() 
+		</script>
+		<div>
+			<button id="back"
+				class="py-2 px-8 mr-2 rounded border-none bg-neutral-900 text-xs text-white">Zurück</button>
+			<button id="save" type="submit" class="py-2 px-8 rounded border-none bg-neutral-900 text-xs text-white">
+				Speichern
+			</button>
+		</div>
 	</div>
 
 	<textarea id='tinymce'>

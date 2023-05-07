@@ -43,16 +43,12 @@
             formData.append("id", Number(entryID))
             formData.append("subjectID", Number(subjectID))
             formData.append("userID", Number(userID))
-            formData.append("title", document.getElementById("title").value)
+            formData.append("title", document.getElementById("title").innerText)
             formData.append("date", date)
             formData.append("content", tinymce.activeEditor.getContent());
 
             const resSave = await fetch("/api/entry/update", { method: "put", headers: { Authorization: token }, body: formData })
         }
-
-        const back = document.getElementById("back");
-
-        back.onclick = () => window.location = document.referrer;
     }
 
 

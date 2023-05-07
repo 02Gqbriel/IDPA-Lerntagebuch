@@ -111,10 +111,10 @@
 
                 for (let i = 0; i < list.length; i++){
                     if (parseInt(urlParams.get('id')) === list[i].subjectID && parseInt(userInfo.userID) === list[i].userID) { 
-                        entryContainer.innerHTML += `<div class="entryItem">
-                                                    <a href="/editor/${list[i].entryID}">${list[i].title}</a>
+                        entryContainer.innerHTML += `<a href="/editor/${list[i].entryID}"><div class="entryItem">
+                                                    <p>${list[i].title}</p>
                                                     <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="showDelete('popupDelete', ${list[i].entryID})" data-id="${list[i].entryID}">Löschen</button>
-                                                </div>`
+                                                </div></a>`
                     }
                 }
                 entryContainer.classList.replace("hidden", "flex")
