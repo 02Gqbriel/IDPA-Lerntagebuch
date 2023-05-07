@@ -47,6 +47,8 @@ router.post('/create', verifyToken, upload.none(), async (req, res) => {
 		userID: number | undefined;
 	};
 
+	console.log(date);
+
 	if (
 		title == undefined ||
 		date == undefined ||

@@ -1,4 +1,4 @@
-document.getElementById('newEntryForm').onsubmit = async (ev) => {
+document.getElementById('newEntryForm').onsubmit = async ev => {
 	ev.preventDefault();
 
 	const token = sessionStorage.getItem('token');
@@ -8,7 +8,7 @@ document.getElementById('newEntryForm').onsubmit = async (ev) => {
 	});
 
 	if (!res.ok) {
-		return window.location.assign("/login")
+		return window.location.assign('/login');
 	}
 
 	const resUserInfo = await fetch('api/auth/info', {
@@ -24,20 +24,21 @@ document.getElementById('newEntryForm').onsubmit = async (ev) => {
 
 	formData.append('title', title);
 
-    var date = new Date(); 
-    var dateFormat = date.getFullYear + "-" + (date.getMonth()+1) + "-" + date.getDate();
-    formData.append('date', dateFormat);
+	var date = new Date();
+	var dateFormat =
+		date.getFullYear + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	formData.append('date', dateFormat);
 
-    var currentUrl = window.location.search;
-    const urlParams = new URLSearchParams(currentUrl);
-    formData.append('subject', parseInt(urlParams.get('id'))); 
+	var currentUrl = window.location.search;
+	const urlParams = new URLSearchParams(currentUrl);
+	formData.append('subject', parseInt(urlParams.get('id')));
 
-	formData.append('userID', userInfo.userID);	
+	formData.append('userID', userInfo.userID);
 
 	const resCreateEntry = await fetch('/api/entry/create', {
 		headers: { Authorization: token },
 		method: 'post',
-		body: formData
+		body: formData,
 	});
 
 	if (resCreateEntry.ok) {
