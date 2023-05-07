@@ -1,7 +1,0 @@
-{
-	"entry": "./index.js",
-	"outfile": "./bundle.js",
-	"external": ["react", "react-dom"],
-	"plugins": ["esbuild-plugin-copy"],
-	"minify": true
-}

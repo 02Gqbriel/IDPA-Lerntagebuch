@@ -1,37 +1,74 @@
 import express from 'express';
-import { router } from './controllers/router';
+import { router as api } from './controllers/api';
+import { router as view } from './controllers/view';
 import { join } from 'path';
 import logger from 'morgan';
-import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import { create } from 'express-handlebars';
+import { createWriteStream } from 'fs';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = process.env.PORT ?? 3000;
-const PUBLIC_FOLDER =
-	process.env.MODE === 'production'
-		? join(process.cwd(), 'dist', 'public')
-		: join(process.cwd(), 'src', 'views');
 
-const TINYMCE =
-	process.env.MODE === 'production'
-		? join(PUBLIC_FOLDER, 'tinymce')
-		: join(process.cwd(), 'node_modules', 'tinymce');
+const PUBLIC_FOLDER = join(process.cwd(), 'src', 'public');
+
+const VIEWS_FOLDER = join(process.cwd(), 'src', 'views');
+
+const LOG_FOLDER = join(process.cwd(), 'logs', `access.log`);
+
+const TINYMCE = join(process.cwd(), 'node_modules', 'tinymce');
+const TINYMCE_LANGS = join(
+	process.cwd(),
+	'node_modules',
+	'tinymce-i18n',
+	'langs6'
+);
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(
+	logger(process.env.MODE === 'production' ? 'combined' : 'dev', {
+		stream:
+			process.env.MODE === 'production'
+				? createWriteStream(LOG_FOLDER, {
+						flags: 'a',
+				  })
+				: undefined,
+	})
+);
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', router);
+if (process.env.MODE === 'production') {
+	app.use(compression());
+}
+
+const hbs = create({});
+
+app.engine('handlebars', hbs.engine);
+
+app.set('view engine', 'handlebars');
+
+app.set('views', VIEWS_FOLDER);
+
+if (process.env.MODE == 'production') {
+	app.enable('view cache');
+}
+
+app.use('/api', api);
+
+app.use('/tinymce/langs', express.static(TINYMCE_LANGS));
+
+app.use('/tinymce', express.static(TINYMCE));
 
 app.use('/tinymce', express.static(TINYMCE));
 
 app.use(express.static(PUBLIC_FOLDER));
 
-app.get('*', (req, res) => {
-	res.status(404).sendFile(join(PUBLIC_FOLDER, '404.html'));
-});
+app.use(view);
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
 	console.log('> Server running on http://127.0.0.1:3000/');
 });

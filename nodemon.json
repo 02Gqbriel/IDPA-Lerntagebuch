@@ -5,6 +5,7 @@
 	"execMap": {
 		"ts": "ts-node"
 	},
+
 	"env": {
 		"MODE": "development"
 	}

@@ -1,3 +1,12 @@
 node_modules
 .env
 dist
+
+logs/*
+
+
+pnpm-lock.yaml
+
+tailwind.config.js
+
+src/database/learndiary.db

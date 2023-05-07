@@ -1,0 +1,150 @@
+<head>
+    <link rel="stylesheet" href="/css/entries.css">
+</head>
+
+<script>
+    (async () => {
+        const token = sessionStorage.getItem('token');
+
+        const res = await fetch('/api/auth/verify', {
+            headers: { Authorization: token },
+        });
+
+        if (!res.ok) {
+            return window.location.assign("/login")
+        }
+    })()
+</script>
+
+<div>
+    <div id="entriesHeader">
+        <h3>Meine Einträge</h3>
+        <div>
+            <a href="/subjects"><button
+                    class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Zurück</button></a>
+            <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#"
+                onclick="show('popup')">+ Neuer Eintrag</button>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <h4>Neuer Eintrag erstellen</h4>
+
+        <form id='newEntryForm' action="/api/entry/create" method="post">
+            <label for="entryTitle">Titel des Eintrags: </label>
+            <input type="text" id="entryTitle" name="entryTitle" required><br>
+
+            <div id="newButtons">
+                <button type="submit" id="submit"
+                    class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Fertig</button>
+                <button onclick="hide('popup')">Abbruch</button>
+            </div>
+        </form>
+
+        <script src='/js/newEntry.js'></script>
+    </div>
+
+    <script>
+        $ = function (id) {
+            return document.getElementById(id);
+        }
+
+        var show = function (id) {
+            $(id).style.display = 'block';
+        }
+        var hide = function (id) {
+            $(id).style.display = 'none';
+        }
+        var showDelete = function (deleteid, entryID) {
+            $(deleteid).style.display = 'block';
+            document.getElementById('submitDelete').onclick = async (ev) => {
+                ev.preventDefault();
+
+                const token = sessionStorage.getItem('token');
+
+                const id = entryID;
+                console.log(typeof id + id)
+
+                const formData = new FormData();
+                formData.append('id', id);
+
+                const resDelete = await fetch('/api/entry/delete', {
+                    headers: { Authorization: token },
+                    method: 'delete',
+                    body: formData
+                });
+
+                location.reload();
+                hide('popupDelete');
+            };
+
+            return false;
+        }
+    </script>
+
+    <div id="entryContainer">
+        <script>
+                (async () => {
+                    const token = sessionStorage.getItem('token');
+
+                    const res = await fetch('/api/auth/verify', {
+                        headers: { Authorization: token },
+                    });
+
+                    if (!res.ok) {
+                        return window.location.assign("/login")
+                    }
+
+                    const resUserInfo = await fetch('api/auth/info', {
+                        headers: { Authorization: token },
+                    });
+                    const userInfo = await resUserInfo.json();
+
+                    const resList = await fetch('/api/entry/list', {
+                        headers: { Authorization: token },
+                        method: "get"
+                    });
+
+                    if (!resList.ok) {
+                        return window.location.assign("/login")
+                    }
+
+                    const list = await resList.json();
+                    var currentUrl = window.location.search;
+                    const urlParams = new URLSearchParams(currentUrl);
+                    const entryContainer = document.getElementById("entryContainer");
+
+                    for (let i = 0; i < list.length; i++) {
+                        if (parseInt(urlParams.get('id')) === list[i].subjectID && parseInt(userInfo.userID) === list[i].userID) {
+                            entryContainer.innerHTML += `
+                            <a href="/editor/${list[i].entryID}">
+                                <div class="entryItem">
+                                    <div class="entryTextContainer">
+                                        <p>${list[i].title}</p>
+                                        <p class="entryDate">${list[i].date}</p>
+                                    </div>
+                                    
+                                    <button class="text-xs p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="return showDelete('popupDelete', ${list[i].entryID})" data-id="${list[i].entryID}">
+                                        Löschen
+                                    </button>
+                                </div>
+                            </a>`
+                        }
+                    }
+                    entryContainer.classList.replace("hidden", "flex")
+
+                })()
+
+
+        </script>
+        <div class="popupDelete" id="popupDelete">
+            <h4>Willst du den Eintrag löschen?</h4>
+            <div class="newButtons">
+                <button type="submit" id="submitDelete"
+                    class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Bestätigen</button>
+                <button onclick="hide('popupDelete')">Abbruch</button>
+            </div>
+        </div>
+    </div>
+
+</div>
