@@ -63,6 +63,8 @@ app.use('/tinymce/langs', express.static(TINYMCE_LANGS));
 
 app.use('/tinymce', express.static(TINYMCE));
 
+app.use('/tinymce', express.static(TINYMCE));
+
 app.use(express.static(PUBLIC_FOLDER));
 
 app.use(view);
