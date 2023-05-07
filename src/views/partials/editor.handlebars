@@ -1,20 +1,28 @@
 <form id="form" action="/test" method="post" style='flex-grow: 1'>
 	<div class="w-full flex justify-between items-center">
 
-		<div class="grow py-2 px-1 my-2">
+		<div class="grow flex flex-col py-2 my-2">
 			<span id="title"
-				class="text-3xl py-1 px-1 overflow-hidden appearance-none focus-visible:outline-none border-b-2 mr-3 border-neutral-900 mb-2"
+				class="text-3xl w-fit py-1 pr-3 overflow-hidden appearance-none focus-visible:outline-none border-b-2 mr-3 border-neutral-900 mb-2"
 				role="textbox" contenteditable>
 
 			</span>
 
+			<div class="flex items-baseline gap-4">
+				<span id="subject" class="capitalize"></span>
 
+				<span id="date" class="text-xs"></span>
+
+			</div>
 		</div>
 
 
 		<script>
 			(async () => {
 				const token = sessionStorage.getItem('token');
+
+				if (token == undefined) return
+
 				const entriesList = await fetch('/api/entry/list', {
 					headers: { Authorization: token },
 					method: "get"
@@ -32,7 +40,8 @@
 		<div>
 			<button id="back"
 				class="py-2 px-8 mr-2 rounded border-none bg-neutral-900 text-xs text-white">Zurück</button>
-			<button id="save" type="submit" class="py-2 px-8 rounded border-none bg-neutral-900 text-xs text-white">
+			<button id="save" type="submit"
+				class="py-2 px-8 rounded border-none bg-neutral-900 text-xs text-white disabled:cursor-not-allowed">
 				Speichern
 			</button>
 		</div>

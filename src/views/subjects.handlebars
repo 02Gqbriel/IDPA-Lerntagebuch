@@ -19,41 +19,45 @@
 <div>
     <div id="subjectHeader">
         <h3>Meine Fächer</h3>
-        <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="show('popup')">+ Neues Fach</button>
+        <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#"
+            onclick="show('popup')">+ Neues Fach</button>
     </div>
-    
+
     <div class="popup" id="popup">
         <h4>Neues Fach erstellen</h4>
 
         <form id='newSubjectForm' action="/api/subject/create" method="post">
 
             <label for="subjectName">Fach benennen: </label>
-            <input type="text" id="subjectName" name="subjectName" required><br>
+            <input type="text" id="subjectName" name="subjectName" placeholder="Fachname" required><br>
 
             <div id="newButtons">
-                <button type="submit" id="submit" class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Fertig</button>
+                <button type="submit" id="submit"
+                    class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Fertig</button>
                 <button onclick="hide('popup')">Abbruch</button>
             </div>
-            
+
 
         </form>
-        
+
         <script src='/js/newSubject.js'></script>
     </div>
 
     <script>
-        $ = function(id) {
-        return document.getElementById(id);
+        $ = function (id) {
+            return document.getElementById(id);
         }
 
-        var show = function(id) {
-            $(id).style.display ='block';
+        var show = function (id) {
+            $(id).style.display = 'block';
         }
-        var hide = function(id) {
-            $(id).style.display ='none';
+        var hide = function (id) {
+            $(id).style.display = 'none';
         }
-        var showDelete = function(deleteid, subjectID){
-            $(deleteid).style.display ='block';
+        var showDelete = function (deleteid, subjectID) {
+
+
+            $(deleteid).style.display = 'block';
             document.getElementById('submitDelete').onclick = async (ev) => {
                 ev.preventDefault();
 
@@ -70,69 +74,75 @@
                     method: 'delete',
                     body: formData
                 });
-                
+
                 location.reload();
                 hide('popupDelete');
             };
+
+            return false;
         }
     </script>
 
     <div id="subjectContainer">
 
         <script>
-            (async () => {
-                const token = sessionStorage.getItem('token');
+                (async () => {
+                    const token = sessionStorage.getItem('token');
 
-                const res = await fetch('/api/auth/verify', {
-                    headers: { Authorization: token },
-                });
+                    const res = await fetch('/api/auth/verify', {
+                        headers: { Authorization: token },
+                    });
 
-                if (!res.ok) {
-                    return window.location.assign("/login")
-                }
-
-                const resUserInfoSubject = await fetch('api/auth/info', {
-		            headers: { Authorization: token },
-	            });
-                const userInfoSubject = await resUserInfoSubject.json();
-
-                const resList = await fetch('/api/subject/list', {
-                    headers: { Authorization: token },
-                    method: "get"
-                });
-
-                if (!resList.ok){
-                    return window.location.assign("/login")
-                }
-                const list = await resList.json();
-
-                console.log(list);
-
-                const subjectContainer = document.getElementById("subjectContainer");
-                for (let i = 0; i < list.length; i++){
-                    if (parseInt(userInfoSubject.userID) === list[i].userID) {
-                        subjectContainer.innerHTML += `<a href="/entries?id=${list[i].subjectID}"><div class="subjectItem">
-                                                    <p>${list[i].name}</p>
-                                                    <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="showDelete('popupDelete', ${list[i].subjectID})" data-id="${list[i].subjectID}">Löschen</button>
-                                                </div></a>`
+                    if (!res.ok) {
+                        return window.location.assign("/login")
                     }
-                }
-                subjectContainer.classList.replace("hidden", "flex")
-                
-            })()
-            
+
+                    const resUserInfoSubject = await fetch('api/auth/info', {
+                        headers: { Authorization: token },
+                    });
+                    const userInfoSubject = await resUserInfoSubject.json();
+
+                    const resList = await fetch('/api/subject/list', {
+                        headers: { Authorization: token },
+                        method: "get"
+                    });
+
+                    if (!resList.ok) {
+                        return window.location.assign("/login")
+                    }
+                    const list = await resList.json();
+
+                    const subjectContainer = document.getElementById("subjectContainer");
+                    for (let i = 0; i < list.length; i++) {
+                        if (parseInt(userInfoSubject.userID) === list[i].userID) {
+                            subjectContainer.innerHTML += `
+                        <a href="/entries?id=${list[i].subjectID}">
+                            <div class="subjectItem">
+                                <div class="subjectTextContainer">
+                                    <p >${list[i].name}</p>
+                                </div>
+
+                                <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white text-xs rounded font-normal subjectDeleteButton" href="#" onclick="return showDelete( 'popupDelete', ${list[i].subjectID})" data-id="${list[i].subjectID}">
+                                    Löschen
+                                </button>
+                            </div>
+                        </a>`
+                        }
+                    }
+                    subjectContainer.classList.replace("hidden", "flex")
+
+                })()
+
 
         </script>
         <div class="popupDelete" id="popupDelete">
             <h4>Willst du das Fach löschen?</h4>
             <div class="newButtons">
-                <button type="submit" id="submitDelete" class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Bestätigen</button>
+                <button type="submit" id="submitDelete"
+                    class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal">Bestätigen</button>
                 <button onclick="hide('popupDelete')">Abbruch</button>
             </div>
         </div>
     </div>
 
 </div>
-    
-
-
