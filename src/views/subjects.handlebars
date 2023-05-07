@@ -111,10 +111,10 @@
                 const subjectContainer = document.getElementById("subjectContainer");
                 for (let i = 0; i < list.length; i++){
                     if (parseInt(userInfoSubject.userID) === list[i].userID) {
-                        subjectContainer.innerHTML += `<div class="subjectItem">
-                                                    <a href="/entries?id=${list[i].subjectID}">${list[i].name}</a>
+                        subjectContainer.innerHTML += `<a href="/entries?id=${list[i].subjectID}"><div class="subjectItem">
+                                                    <p>${list[i].name}</p>
                                                     <button class="p-2 px-4 bg-neutral-800 hover:bg-neutral-950 text-white rounded font-normal" href="#" onclick="showDelete('popupDelete', ${list[i].subjectID})" data-id="${list[i].subjectID}">Löschen</button>
-                                                </div>`
+                                                </div></a>`
                     }
                 }
                 subjectContainer.classList.replace("hidden", "flex")
