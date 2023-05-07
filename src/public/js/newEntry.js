@@ -24,9 +24,8 @@ document.getElementById('newEntryForm').onsubmit = async (ev) => {
 
 	formData.append('title', title);
 
-    var date = new Date(); 
-    var dateFormat = date.getFullYear + "-" + (date.getMonth()+1) + "-" + date.getDate();
-    formData.append('date', dateFormat);
+    var date = new Date(Date.now()); 
+    formData.append('date', date);
 
     var currentUrl = window.location.search;
     const urlParams = new URLSearchParams(currentUrl);
