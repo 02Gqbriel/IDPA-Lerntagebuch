@@ -2,8 +2,20 @@
     window.onload = () => {
         const form = document.getElementById("form")
 
+        const test = window.location.pathname.split("/").reverse()[0] === "test";
+
+        if (test) {
+            const button = document.getElementById("save");
+
+            console.log(button)
+
+            button.disabled = true;
+        }
+
         form.onsubmit = async (ev) => {
             ev.preventDefault()
+
+            if (test) return;
 
             const token = sessionStorage.getItem('token');
 
@@ -31,13 +43,19 @@
             formData.append("id", Number(entryID))
             formData.append("subjectID", Number(subjectID))
             formData.append("userID", Number(userID))
-            formData.append("title", title)
+            formData.append("title", document.getElementById("title").value)
             formData.append("date", date)
             formData.append("content", tinymce.activeEditor.getContent());
 
             const resSave = await fetch("/api/entry/update", { method: "put", headers: { Authorization: token }, body: formData })
         }
+
+        const back = document.getElementById("back");
+
+        back.onclick = () => window.location = document.referrer;
     }
+
+
 </script>
 
 
